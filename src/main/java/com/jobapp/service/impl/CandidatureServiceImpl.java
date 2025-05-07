@@ -150,6 +150,11 @@ public class CandidatureServiceImpl implements CandidatureService {
         );
     }
 
+    public Candidature getById(Long id) {
+        return candidatureRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Candidature non trouvée"));
+    }
+
     @Override
     public void deleteAllByCandidatId(Long candidatId) {
         // Récupère toutes les candidatures du candidat
