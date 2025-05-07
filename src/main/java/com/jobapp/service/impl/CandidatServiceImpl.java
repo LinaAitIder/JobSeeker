@@ -41,7 +41,6 @@ public class CandidatServiceImpl implements CandidatService {
     private final CandidatureRepository candidatureRepository;
     private final CertificationRepository certificationRepository;
     private final FileStorageService fileStorageService;
-    @Autowired
     private final CertificationService certificationService;
     @Autowired
     private final CandidatureService candidatureService;

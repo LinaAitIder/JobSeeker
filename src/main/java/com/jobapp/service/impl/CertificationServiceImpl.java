@@ -1,12 +1,15 @@
 package com.jobapp.service.impl;
 
 import com.jobapp.dto.exception.NotFoundException;
+import com.jobapp.dto.exception.ServiceException;
 import com.jobapp.model.Candidat;
 import com.jobapp.model.Certification;
 import com.jobapp.repository.CandidatRepository;
 import com.jobapp.repository.CertificationRepository;
 import com.jobapp.service.CertificationService;
 import com.jobapp.service.FileStorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +18,49 @@ import java.util.List;
 
 @Service
 public class CertificationServiceImpl implements CertificationService {
-
+    private static final Logger logger = LoggerFactory.getLogger(CertificationServiceImpl.class);
     private CertificationRepository certificationRepository;
 
     private CandidatRepository candidatRepository;
 
     private FileStorageService fileStorageService;
 
+    @Autowired
+    public CertificationServiceImpl(
+            CertificationRepository certificationRepository,
+            CandidatRepository candidatRepository,
+            FileStorageService fileStorageService) {
+        this.certificationRepository = certificationRepository;
+        this.candidatRepository = candidatRepository;
+        this.fileStorageService = fileStorageService;
+    }
+
     @Override
     public Certification addCertification(Long candidatId, String filePath, String nom) {
-        Candidat candidat = candidatRepository.findById(candidatId)
-                .orElseThrow(() -> new NotFoundException("Candidat non trouvé"));
+        logger.info("Début addCertification - candidatId: {}, filePath: {}, nom: {}", candidatId, filePath, nom);
 
-        Certification certification = new Certification();
-        certification.setPath(filePath);
-        certification.setNom(nom);
-        certification.setCandidat(candidat);
+        try {
+            Candidat candidat = candidatRepository.findById(candidatId)
+                    .orElseThrow(() -> {
+                        logger.error("Candidat non trouvé avec ID: {}", candidatId);
+                        return new NotFoundException("Candidat non trouvé");
+                    });
 
-        return certificationRepository.save(certification);
+            logger.info("Candidat trouvé: {}", candidat.getEmail());
+
+            Certification certification = new Certification();
+            certification.setPath(filePath);
+            certification.setNom(nom);
+            certification.setCandidat(candidat);
+
+            Certification savedCertification = certificationRepository.save(certification);
+            logger.info("Certification enregistrée avec ID: {}", savedCertification.getId());
+
+            return savedCertification;
+        } catch (Exception e) {
+            logger.error("Erreur lors de l'ajout de certification", e);
+            throw new ServiceException("Échec de l'ajout de certification", e);
+        }
     }
 
     @Override

@@ -31,4 +31,7 @@ public interface CertificationRepository extends JpaRepository<Certification, Lo
     @Modifying
     @Query("DELETE FROM Certification c WHERE c.candidat.id = :candidatId")
     void deleteByCandidatId(@Param("candidatId") Long candidatId);
+
+    @Query("SELECT COUNT(c) > 0 FROM Certification c WHERE c.path = :path")
+    boolean existsByPath(@Param("path") String path);
 }
