@@ -18,11 +18,13 @@ import com.jobapp.dto.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -187,7 +189,49 @@ public class RecruteurServiceImpl implements RecruteurService {
 
     @Override
     public ResponseEntity<OffreResponse> createOffre(Long recruteurId, CreateOffreRequest request) {
-        return null;
+        try {
+            // 1. Vérifier que le recruteur existe
+            Recruteur recruteur = recruteurRepository.findById(recruteurId)
+                    .orElseThrow(() -> new NotFoundException("Recruteur non trouvé"));
+
+            // 2. Valider les données de la requête
+            if (request.getTitre() == null || request.getTitre().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body(new OffreResponse(null, null, "Le titre est obligatoire", null, null, null, null, null, null, null, null, null));
+            }
+
+            if (request.getDateExpiration() != null && request.getDateExpiration().isBefore(LocalDate.now())) {
+                return ResponseEntity.badRequest()
+                        .body(new OffreResponse(null, null, "La date d'expiration doit être dans le futur", null, null, null, null, null, null, null, null, null));
+            }
+
+            // 3. Créer et sauvegarder l'offre
+            OffreEmploi offre = new OffreEmploi();
+            offre.setTitre(request.getTitre());
+            offre.setDescription(request.getDescription());
+            offre.setDomaine(request.getDomaine());
+            offre.setVille(request.getVille());
+            offre.setPays(request.getPays());
+            offre.setRecruteur(recruteur);
+            offre.setDatePublication(LocalDate.now());
+            offre.setDateExpiration(request.getDateExpiration());
+            offre.setSalaireMin(request.getSalaireMin());
+            offre.setSalaireMax(request.getSalaireMax());
+            offre.setTypeContrat(request.getTypeContrat());
+
+            OffreEmploi savedOffre = offreRepository.save(offre);
+
+            // 4. Retourner la réponse
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(mapToOffreResponse(savedOffre));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new OffreResponse(null, null, e.getMessage(), null, null, null, null, null, null, null, null, null));
+        } catch (Exception e) {
+            logger.error("Erreur lors de la création de l'offre", e);
+            return ResponseEntity.internalServerError()
+                    .body(new OffreResponse(null, null, "Erreur interne du serveur", null, null, null, null, null, null, null, null, null));
+        }
     }
 
     private RecruteurProfileResponse mapToRecruteurProfileResponse(Recruteur recruteur) {
