@@ -11,17 +11,16 @@ import com.jobapp.repository.CandidatRepository;
 import com.jobapp.service.CandidatService;
 import com.jobapp.service.FileStorageService;
 import com.jobapp.service.CertificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import java.nio.file.Path;
@@ -33,6 +32,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/candidat")
 public class CandidatController {
+    private static final Logger logger = LoggerFactory.getLogger(CandidatController.class);
     private final CandidatService candidatService;
     private final FileStorageService fileStorageService;
     private final FileStorageProperties fileStorageProperties;
@@ -83,12 +83,6 @@ public class CandidatController {
     @DeleteMapping("/{id}")
     @PreAuthorize("#id == authentication.principal.id && hasRole('CANDIDAT')")
     public ResponseEntity<Void> deleteCandidat(@PathVariable Long id) {
-
-        // Double vérification de sécurité
-        // UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-        //if (!principal.getId().equals(id)) {
-        //   return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        // } ajouter Authentication authentication in arguments
 
         return candidatService.deleteCandidat(id);
     }
@@ -164,24 +158,32 @@ public class CandidatController {
         return uploadCv(id, file);
     }
 
-    @PostMapping("/{id}/certifications")
+    @PostMapping(value = "/{id}/certifications", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addCertification(
             @PathVariable Long id,
             @RequestParam("file") MultipartFile file,
             @RequestParam("nom") String nom) {
 
+        logger.info("Requête reçue - Candidat ID: {}, Nom Certification: {}, Taille Fichier: {}",
+                id, nom, file.getSize());
+
         try {
             Certification certification = candidatService.addCertification(id, file, nom);
-            return ResponseEntity.ok(new CertificationResponse(
+
+            CertificationResponse response = new CertificationResponse(
                     certification.getId(),
                     certification.getNom(),
-                    certification.getPath()
-            ));
+                    certification.getPath());
+
+            logger.info("Certification créée: {}", response);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
+            logger.error("Erreur endpoint certification", e);
             return ResponseEntity.badRequest()
-                    .body(new ErrorResponse("CERTIFICATION_ADD_ERROR", e.getMessage()));
-}
-}
+                    .body(new ErrorResponse("CERTIFICATION_ERROR", e.getMessage()));
+        }
+    }
 
     @DeleteMapping("/{id}/certifications/{certificationId}")
     public ResponseEntity<?> removeCertification(
