@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,11 +33,18 @@ public class CandidatureController {
         this.fileStorageProperties = fileStorageProperties;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CandidatureResponse> postuler(
-            @RequestParam Long candidatId,
-            @RequestParam Long offreId,
-            @RequestBody CandidatureRequest request) {
+            @RequestParam("candidatId") Long candidatId,
+            @RequestParam("offreId") Long offreId,
+            @RequestParam(value = "lettreMotivation", required = false) MultipartFile lettreMotivation,
+            @RequestParam(value = "messageRecruteur", required = false) String messageRecruteur) {
+
+        CandidatureRequest request = new CandidatureRequest();
+        request.setOffreId(offreId);
+        request.setLettreMotivationFile(lettreMotivation);
+        request.setMessageRecruteur(messageRecruteur);
+
         return candidatureService.postuler(candidatId, offreId, request);
     }
 
