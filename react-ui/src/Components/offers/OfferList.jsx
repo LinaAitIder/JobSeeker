@@ -1,4 +1,5 @@
 import React from 'react';
+import RecruiterCard from "../users/recruiter/RecruiterCard";
 import DataMapper from "../utils/DataMapper";
 import ApplyButton from "../applications/ApplyButton";
 import CandidateMainHeader from "../utils/headers/CandidateMainHeader";

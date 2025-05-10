@@ -1,103 +1,122 @@
-import React, {useEffect, useState} from 'react'
-import axios from 'axios';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import {Link, useNavigate} from 'react-router-dom';
-import {MagnifyingGlassIcon} from "@heroicons/react/16/solid";
 
+import React, {useEffect, useState} from 'react';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { Link, useNavigate } from 'react-router-dom';
+import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+import AuthService from "../../services/AuthService";
+import CandidateService from "../../services/CandidateService";
+
+const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
 
 const CandidateMainHeader = () => {
-  const [profilePicture, setProfilePicture] = React.useState('https://www.pngmart.com/files/23/Profile-PNG-Photo.png'); 
-  const Navigate = useNavigate();
-  const [keyword, setKeyword]= useState('');
+    const [profilePicture, setProfilePicture] = useState('https://www.pngmart.com/files/23/Profile-PNG-Photo.png');
+    const [keyword, setKeyword] = useState('');
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const navigate = useNavigate();
+    console.log("user id",USER_ID)
 
-  //can I have too many useEffects and what are the different types of useEffects
-  // useEffect(()=>{
-  //      axios.get('http://localhost:8080/api/candidate/profilePicture').then((response)=>{
-  //       setProfilePicture(response.data.profilePictureUrl);
-  //   }).catch((error)=>{
-  //       console.error('Error fetching profile picture:', error);
-  //   });
-  // })
-    // Let's have an http request to get all the user data , I also need to verify if i really get the id from the authresponse
-    //the localStorage , what I saved in the localStorage is not all the user of the data
-  //   // Can we have a useEffect that manages a lot of http requests
-  // useEffect(()=>{
-  //     axios.get('http://localhost:8080/api/candidate/profile')
-  // })
+    useEffect(() => {
+        const fetchPP= async () =>{
+            try {
+                console.log(USER_ID);
+                const response =await CandidateService.getPProfileRequest(USER_ID);
+                    if(response.status === 200){
+                        const fetchedImageUrl=URL.createObjectURL(response.data);
+                        console.log("fetched Image in Main Header :",fetchedImageUrl);
+                        setProfilePicture(fetchedImageUrl);
+                    }else {
+                        console.warn("Unexpected response status:", response.status);
+                    }
+            } catch(err){
+                console.error(err);
+            }
 
-    // function searchOffers(){
-    //   const response = OfferService.getOffersByKeyWord(keyword);
-    // }
+        };
+        fetchPP();
 
-    function logout(){
-      localStorage.removeItem("user");
-      Navigate("/login");
+    }, []);
+
+    function logout() {
+        AuthService.logout();
+        navigate("/login");
     }
-    function goProfile(){
-      Navigate("/candidateProfile");
+    function goProfile() {
+        navigate("/candidateProfile");
+    }
+    function Applications() {
+        navigate("/ApplicationList");
     }
 
-  return (
-    <header className="p-2 bg-blue-500">
-    <div className="flex flex-row items-center justify-between">
-      <Link to="/MainHome" className="text-white text-2xl pl-4 hover:cursor-pointer"
-        style={{fontFamily:'poppins'}}>
-          Job Seeker
-      </Link>
-      <Link to="/CompaniesList" className='text-white text-sm p-0 m-0' style={{fontFamily:'poppins'}}>CompaniesList</Link>
-      <Link to="/OffresList"  className='text-white text-sm  p-0 m-0' style={{fontFamily:'poppins'}}>OffresList</Link>
-      
-      
-        
-     <div className='flex flex-row justify-between items-center relative'>
-         <input className="py-3 px-3 rounded-full bg-white text-black " onChange={e=>setKeyword(e.target.value)}/>
-         <button className="bg-white text-black border-0 px-2 py-2 text-sm font-serif rounded-full absolute right-20">
-         <MagnifyingGlassIcon className="text-black size-3 "  />
-      </button>
-     <div className="ml-2">
-      <Menu> 
-      <MenuButton className=" px-3 py-3 rounded  ">
-        <img src={profilePicture} className="rounded-full w-8 h-8" alt="Profile" />
-      </MenuButton>
-      <MenuItems anchor="bottom end" className=" bg-gray-100 rounded-md shadow-lg p-1 ring-opacity-5 focus:outline-none">
-      <MenuItem className="pr-7 mt-2">
-          <button className="group flex w-full items-center gap-2 data-[focus]:bg-gray-400 p-2 rounded-sm text-black font-serif" >
-            Change CV
-          </button>
-        </MenuItem>
-        <hr/>
-      <MenuItem className="pr-7 mt-2">
-          <button className="group flex w-full items-center gap-2 data-[focus]:bg-gray-400 p-2 rounded-sm text-black font-serif" onClick={goProfile} >
-            Your profile
-          </button>
-        </MenuItem>
-        <MenuItem className="pr-7 mt-2">
-          <button className="group flex w-full items-center gap-2 data-[focus]:bg-gray-400 p-2 rounded-sm text-black font-serif" >
-            Saved Job Offers
-          </button>
-        </MenuItem>
-        <MenuItem className="pr-7 mt-2">
-          <button className="group flex w-full items-center gap-2 data-[focus]:bg-gray-400 p-2 rounded-sm text-black font-serif" >
-            Your applications
-          </button>
-        </MenuItem>
-        <MenuItem className="pr-7 mt-2">
-          <button className="group flex w-full items-center gap-2 data-[focus]:bg-gray-400 p-2 rounded-sm text-black font-serif" onClick={logout} >
-            Sign Out
-          </button>
-        </MenuItem>
-        <MenuItem className="pr-7 mt-2">
-          <button className="group flex w-full items-center gap-2 data-[focus]:bg-gray-400 p-2 rounded-sm text-black font-serif" >
-            About Us
-          </button>
-        </MenuItem>
-      </MenuItems>
-      </Menu>
-     </div>
-    </div>
-    </div>
-  </header>
-  )
-}
 
-export default CandidateMainHeader
+
+    return (
+        <header className="bg-blue-500 p-4">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center relative w-screen">
+                    <Link to="/MainHome" className="text-white text-2xl" style={{ fontFamily: 'poppins' }}>
+                        Job Seeker
+                    </Link>
+                    <button className="text-white ml-4 lg:hidden absolute right-0" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                        {isMenuOpen ? <XMarkIcon className="w-6 h-6" /> : <Bars3Icon className="w-6 h-6" />}
+                    </button>
+                </div>
+                <nav className="hidden lg:flex items-center justify-between space-x-10">
+                    <Link to="/CompaniesList" className="text-white text-sm" style={{ fontFamily: 'poppins' }}>Companies</Link>
+                    <Link to="/OffersPage" className="text-white text-sm" style={{ fontFamily: 'poppins' }}>Offers</Link>
+
+                    <div className="relative">
+                        <input
+                            className="py-2 px-3 rounded-full bg-white text-black"
+                            onChange={e => setKeyword(e.target.value)}
+                            placeholder="Search..."
+                        />
+                        <button className="absolute right-1 top-2 bg-white text-black p-1 rounded-full">
+                            <MagnifyingGlassIcon className="w-4 h-4" />
+                        </button>
+                    </div>
+
+                    <Menu>
+                        <MenuButton className="w-10 h-10 ">
+                            <img src={profilePicture} className="rounded-full w-10 h-10 object-cover " alt="Profile"  />
+                        </MenuButton>
+                        <MenuItems anchor="bottom end" className="bg-white rounded-md shadow-lg p-2 mt-2 space-y-2">
+                                <MenuItem>
+                                    <button className="w-full text-left p-2 hover:bg-gray-200 rounded">Change CV</button>
+                                </MenuItem>
+                                <MenuItem>
+                                <button onClick={goProfile} className="w-full text-left p-2 hover:bg-gray-200 rounded">Your Profile</button>
+                            </MenuItem>
+                            <MenuItem>
+                                <button onClick={Applications} className="w-full text-left p-2 hover:bg-gray-200 rounded">Your Applications</button>
+                            </MenuItem>
+                            <MenuItem>
+                                <button onClick={logout} className="w-full text-left p-2 hover:bg-gray-200 rounded">Sign Out</button>
+                            </MenuItem>
+                            <MenuItem>
+                                <button className="w-full text-left p-2 hover:bg-gray-200 rounded">About Us</button>
+                            </MenuItem>
+                        </MenuItems>
+                    </Menu>
+                </nav>
+            </div>
+
+            {isMenuOpen && (
+
+                <div className="lg:hidden mt-4 space-y-2 flex flex-col">
+                    <button onClick={Applications} className="w-full text-left p-2 hover:bg-gray-200 rounded">Applications</button>
+                    <Link to="/CompaniesList" className="w-full text-left p-2 hover:bg-gray-200 rounded" onClick={() => setIsMenuOpen(false)}>Companies</Link>
+                    <Link to="/OffersPage" className="w-full text-left p-2 hover:bg-gray-200 rounded"  onClick={() => setIsMenuOpen(false)}>Offers</Link>
+
+                    <div className="flex flex-col gap-2 mt-2">
+                        <button onClick={goProfile} className="w-full text-left p-2 hover:bg-gray-200 rounded">Your Profile</button>
+                        <button onClick={logout} className="w-full text-left p-2 hover:bg-gray-200 rounded">Sign Out</button>
+
+                        <button className="w-full text-left p-2 hover:bg-gray-200 rounded">About Us</button>
+                    </div>
+                </div>
+            )}
+        </header>
+    );
+};
+
+export default CandidateMainHeader;

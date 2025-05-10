@@ -1,9 +1,13 @@
 import {useEffect, useState} from "react";
 import OfferService from "../services/OfferService";
 import OfferList from "./OfferList";
+import Message from "../utils/Message";
 
 export default function OffersPage(){
-
+    const [message, setMessage] = useState({
+        type:'',
+        text:''
+    });
     const [offers, setOffers] = useState([]);
     useEffect(()=>{
         const fetchOffers = async()=>{
@@ -25,6 +29,7 @@ export default function OffersPage(){
     return (
         <div className="flex flex-col justify-center align-center text-black">
             <OfferList offers={offers}/>
+            <Message type={message.type} text={message.text} />
         </div>
     );
 
