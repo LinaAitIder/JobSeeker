@@ -6,7 +6,7 @@ class RecruiterService{
         console.log("localstorage"+localStorage.getItem('user'));
         console.log("userId"+recruiterId);
         try{
-            return api.delete(`/candidat/${recruiterId}`);
+            return api.delete(`/recruteur/${recruiterId}`); // need to make sure of this api
 
         } catch(error){
             console.log(error);
@@ -17,10 +17,18 @@ class RecruiterService{
 
     }
 
-    updateRecruiterRequest(updatedCandidate, recruiterId){
-        //let updatedData = { updatedCandidate : upa}
+    getRecruiterProfileRequest(recruiterId){
         try{
-            return  api.put(`/candidat/${recruiterId}/profile`, updatedCandidate);
+            return  api.get(`/recruteur/${recruiterId}`);
+        }catch(err){
+            console.log(err);
+            return err;
+        }
+    }
+
+    updateRecruiterRequest(updatedRecruiter, recruiterId){
+        try{
+            return  api.put(`/recruteur/${recruiterId}`, updatedRecruiter);
         }catch(err){
             console.log(err);
             return err;
@@ -28,33 +36,41 @@ class RecruiterService{
 
     }
 
-    uploadCompanyLogoRequest(formData, recruiterId){
+    updatePhotoProfileRequest(formData, recruiterId){
         try{
-            return api.post(`candidat/${recruiterId}/cv/initial`, formData)
+            return api.post(`recruteur/${recruiterId}/photo`, formData)
         }catch(err){
             return err;
         }
 
     }
 
-    updateCompanyLogoRequest(formData, recruiterId){
+    addOfferRequest(offerData, recruiterId){
         try{
-            return api.patch(`candidat/${recruiterId}/cv`, formData)
-        }catch(err){
-            return err;
-        }
-
-    }
-
-    addCertificateRequest(CertificateFile, recruiterId , name){
-        try{
-            return api.post(`candidat/${recruiterId}/certifications`, CertificateFile, name);
+            return api.post(`recruteur/${recruiterId}/offre`, offerData);
         }catch(err){
             return err;
         }
     }
 
-    deleteCertificateRequest(Certificate, recruiterId, certificationId){
+    getOffersRequest(recruiterId){
+        try{
+            return api.get(`recruteur/${recruiterId}/offre`);
+        }catch(err){
+            return err;
+        }
+    }
+
+   
+    getApplicationsOfferRequest(offerId, status){
+        try{
+            return api.get(`recruteur/offres/${offerId}/candidatures`);
+        }catch(err){
+            return err;
+        }
+    }
+
+    deleteOfferRequest(Certificate, recruiterId, certificationId){
         try{
             return api.delete(`candidat/${recruiterId}/certifications/${certificationId}`)
         }catch(err){
@@ -65,4 +81,4 @@ class RecruiterService{
 
 }
 
-export default new CandidateService();
+export default new RecruiterService();
