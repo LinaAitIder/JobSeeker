@@ -61,7 +61,7 @@ class RecruiterService{
         }
     }
 
-   
+
     getApplicationsOfferRequest(offerId, status){
         try{
             return api.get(`recruteur/offres/${offerId}/candidatures`);
