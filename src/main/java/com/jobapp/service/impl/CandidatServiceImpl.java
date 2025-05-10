@@ -26,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -81,7 +82,35 @@ public class CandidatServiceImpl implements CandidatService {
             if (request.getVille() != null) candidat.setVille(request.getVille());
             if (request.getPays() != null) candidat.setPays(request.getPays());
             if (request.getCvPath() != null) candidat.setCvPath(request.getCvPath());
-            if (request.getPhotoProfilPath() != null) candidat.setPhotoProfilPath(request.getPhotoProfilPath());
+
+            // Gestion de la photo de profil
+            if (request.getPhotoProfilFile() != null && !request.getPhotoProfilFile().isEmpty()) {
+                // Validation du type de fichier
+                String contentType = request.getPhotoProfilFile().getContentType();
+                if (contentType == null || !contentType.startsWith("image/")) {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST,
+                            "Seules les images sont acceptées pour la photo de profil"
+                    );
+                }
+
+                // Suppression de l'ancienne photo si elle existe
+                if (candidat.getPhotoProfilPath() != null) {
+                    try {
+                        fileStorageService.deleteFile(candidat.getPhotoProfilPath());
+                    } catch (IOException e) {
+                        logger.error("Échec de suppression de l'ancienne photo de profil", e);
+                    }
+                }
+
+                // Stockage de la nouvelle photo
+                String photoPath = fileStorageService.storeProfilePhoto(
+                        request.getPhotoProfilFile(),
+                        "candidat",
+                        id
+                );
+                candidat.setPhotoProfilPath(photoPath);
+            }
 
             // Gestion des certifications
             if (request.getCertifications() != null) {
@@ -92,7 +121,14 @@ public class CandidatServiceImpl implements CandidatService {
             return ResponseEntity.ok(mapToCandidatProfileResponse(updated));
 
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("NOT_FOUND", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("NOT_FOUND", e.getMessage()));
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Erreur lors de la mise à jour du profil");
         }
     }
 

@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -100,7 +101,35 @@ public class RecruteurServiceImpl implements RecruteurService {
             if (request.getPrenom() != null) recruteur.setPrenom(request.getPrenom());
             if (request.getPosition() != null) recruteur.setPosition(request.getPosition());
             if (request.getTelephone() != null) recruteur.setTelephone(request.getTelephone());
-            if (request.getPhotoProfilPath() != null) recruteur.setPhotoProfilPath(request.getPhotoProfilPath());
+
+            // Gestion de la photo de profil
+            if (request.getPhotoProfilFile() != null && !request.getPhotoProfilFile().isEmpty()) {
+                // Validation du type de fichier
+                String contentType = request.getPhotoProfilFile().getContentType();
+                if (contentType == null || !contentType.startsWith("image/")) {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST,
+                            "Seules les images sont acceptées pour la photo de profil"
+                    );
+                }
+
+                // Suppression de l'ancienne photo si elle existe
+                if (recruteur.getPhotoProfilPath() != null) {
+                    try {
+                        fileStorageService.deleteFile(recruteur.getPhotoProfilPath());
+                    } catch (IOException e) {
+                        logger.error("Échec de suppression de l'ancienne photo de profil", e);
+                    }
+                }
+
+                // Stockage de la nouvelle photo
+                String photoPath = fileStorageService.storeProfilePhoto(
+                        request.getPhotoProfilFile(),
+                        "recruteur",
+                        id
+                );
+                recruteur.setPhotoProfilPath(photoPath);
+            }
 
             // Gestion de l'entreprise via son nom
             if (request.getEntrepriseNom() != null) {
@@ -110,8 +139,16 @@ public class RecruteurServiceImpl implements RecruteurService {
 
             recruteurRepository.save(recruteur);
             return ResponseEntity.ok(mapToRecruteurProfileResponse(recruteur));
+
         } catch (NotFoundException e) {
-            return ResponseEntity.status(404).body(new ErrorResponse("NOT_FOUND", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("NOT_FOUND", e.getMessage()));
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Erreur lors de la mise à jour du profil");
         }
     }
 

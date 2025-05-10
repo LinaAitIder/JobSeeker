@@ -1,12 +1,14 @@
 package com.jobapp.dto.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UpdateRecruteurProfileRequest {
     private String nom;
     private String prenom;
     private String entrepriseNom;
     private String position;
     private String telephone;
-    private String photoProfilPath;
+    private MultipartFile photoProfilFile;
 
     public String getNom() { return nom; }
 
@@ -28,8 +30,7 @@ public class UpdateRecruteurProfileRequest {
 
     public void setTelephone(String telephone) { this.telephone = telephone; }
 
-    public String getPhotoProfilPath() { return photoProfilPath; }
+    public MultipartFile getPhotoProfilFile() { return photoProfilFile; }
 
-    public void setPhotoProfilPath(String photoProfilPath) {
-        this.photoProfilPath = photoProfilPath; }
+    public void setPhotoProfilFile(MultipartFile photoProfilFile) { this.photoProfilFile = photoProfilFile; }
 }

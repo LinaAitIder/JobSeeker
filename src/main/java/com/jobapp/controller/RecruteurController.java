@@ -43,12 +43,27 @@ public class RecruteurController {
         return recruteurService.getRecruteurProfile(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateRecruteurProfile(
             @PathVariable Long id,
-            @RequestBody UpdateRecruteurProfileRequest request) {
+            @RequestParam(value = "nom", required = false) String nom,
+            @RequestParam(value = "prenom", required = false) String prenom,
+            @RequestParam(value = "entrepriseNom", required = false) String entrepriseNom,
+            @RequestParam(value = "position", required = false) String position,
+            @RequestParam(value = "telephone", required = false) String telephone,
+            @RequestParam(value = "photoProfil", required = false) MultipartFile photoProfil) {
+
+        UpdateRecruteurProfileRequest request = new UpdateRecruteurProfileRequest();
+        request.setNom(nom);
+        request.setPrenom(prenom);
+        request.setEntrepriseNom(entrepriseNom);
+        request.setPosition(position);
+        request.setTelephone(telephone);
+        request.setPhotoProfilFile(photoProfil);
+
         return recruteurService.updateRecruteurProfile(id, request);
     }
+
     @PatchMapping("/{id}/password")
     @PreAuthorize("#id == authentication.principal.id && hasRole('RECRUTEUR')")
     public ResponseEntity<?> updateMotDePasse(
