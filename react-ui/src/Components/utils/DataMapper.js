@@ -1,4 +1,3 @@
-// File: DataMapper.js
 
 export default class DataMapper {
     static mapRecruiterToFrench(recruiter) {
@@ -13,7 +12,40 @@ export default class DataMapper {
         };
     }
 
-    static transformCandidateToEnglish(frenchData) {
+    static mapOfferToFrench(offer) {
+        return {
+            id : offer.id,
+            titre: offer.title,
+            datePublication: offer.publicationDate,
+            dateExpiration: offer.expirationDate,
+            description: offer.description,
+            domaine: offer.domain,
+            pays: offer.country,
+            ville: offer.city,
+            salaireMin: offer.salaryMin,
+            salaireMax: offer.salaryMax,
+            typeContrat: offer.contractType
+        };
+    }
+
+    static mapOfferToEnglish(offer) {
+        return {
+            id : offer.id,
+            title: offer.titre,
+            publicationDate: offer.datePublication,
+            expirationDate: offer.dateExpiration,
+            description: offer.description,
+            domain: offer.domaine,
+            country: offer.pays,
+            city: offer.ville,
+            salaryMin: offer.salaireMin,
+            salaryMax: offer.salaireMax,
+            contractType: offer.typeContrat
+        };
+    }
+
+
+    static mapCandidateToEnglish(frenchData) {
         return {
             id: frenchData.id,
             profilePicture: frenchData.photoProfil,
@@ -27,4 +59,19 @@ export default class DataMapper {
             certifications: frenchData.certifications
         }
     }
+    static mapCandidateToFrench(englishData) {
+        return {
+            id: englishData.id,
+            photoProfil: englishData.profilePicture,
+            nom: englishData.firstName,
+            prenom: englishData.lastName,
+            email: englishData.email,
+            telephone: englishData.phoneNumber,
+            ville: englishData.city,
+            pays: englishData.country,
+            cvPath: englishData.cvPath,
+            certifications: englishData.certifications
+        };
+    }
+
 }
