@@ -1,12 +1,16 @@
 //Here we need to manage user services
 
-import {useNavigate} from "react-router-dom";
-import axios from "axios";
 import api from "../../api/axiosConfig";
-import {editableInputTypes} from "@testing-library/user-event/dist/utils";
-const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 class CandidateService{
+
+    getCandidateProfileRequest(candidatId){
+        try {
+            return api.get(`/candidat/${candidatId}`);
+        } catch(error){
+            console.error(error);
+        }
+    }
 
     deleteAccountRequest(candidatId){
          console.log("localstorage"+localStorage.getItem('user'));
@@ -24,9 +28,12 @@ class CandidateService{
     }
 
     updateCandidateRequest(updatedCandidate, candidatId){
-        //let updatedData = { updatedCandidate : upa}
          try{
-             return  api.put(`/candidat/${candidatId}/profile`, updatedCandidate);
+             return  api.put(`/candidat/${candidatId}/profile`, updatedCandidate , {
+                 headers: {
+                     'Content-Type': 'multipart/form-data'
+                 }
+             });
          }catch(err){
              console.log(err);
              return err;
@@ -34,7 +41,24 @@ class CandidateService{
 
     }
 
-    //this one should receive the file multipartFile
+    getPProfileRequest(candidatId){
+        try{
+            return  api.get(`/candidat/${candidatId}/photo`, {responseType: 'blob'});
+        }catch(err){
+            console.log(err);
+            return err;
+        }
+    }
+
+    updatePProfileRequest(candidatId, imageFile){
+        try{
+            return  api.post(`/candidat/${candidatId}/photo`,imageFile);
+        }catch(err){
+            console.log(err);
+            return err;
+        }
+    }
+
     uploadCvRequest(formData, candidatId){
         try{
             return api.post(`candidat/${candidatId}/cv/initial`, formData)
@@ -44,7 +68,6 @@ class CandidateService{
 
     }
 
-    //This one should receive also the multipartFile
     updateCvRequest(formData, candidatId){
         try{
             return api.patch(`candidat/${candidatId}/cv`, formData)
@@ -64,23 +87,29 @@ class CandidateService{
         }
 
     }
-    //here i need to pass the certificate file and the name of the file
-    //I need to send the file "file" and the other param as nom
-    addCertificateRequest(CertificateFile, candidatId , name){
+
+    addCertificateRequest(CertificateData, candidateId){
         try{
-            return api.post(`candidat/${candidatId}/certifications`, CertificateFile, name);
+            return api.post(`candidat/${candidateId}/certifications`, CertificateData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
         }catch(err){
             return err;
         }
     }
 
-    deleteCertificateRequest(Certificate, candidatId, certificationId){
+    deleteCertificateRequest(candidatId, certificationId){
         try{
             return api.delete(`candidat/${candidatId}/certifications/${certificationId}`)
         }catch(err){
             return err;
         }
     }
+
+
+
 
 
 }
