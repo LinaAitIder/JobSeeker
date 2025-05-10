@@ -7,7 +7,7 @@ const AuthRoute = () => {
 
     if (user) {
         // Redirect based on user role
-        const redirectPath = user.role === 'RECRUITER' 
+        const redirectPath = user.role === 'RECRUTEUR'
             ? '/recruiterProfile' 
             : '/candidateProfile';
         return <Navigate to={redirectPath} replace />;

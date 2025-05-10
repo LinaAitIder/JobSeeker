@@ -2,10 +2,10 @@ import {React, useEffect, useState} from 'react'
 import { useNavigate} from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import HomeHeader from '../utils/headers/HomeHeader';
-import { GoogleLogin } from '@react-oauth/google';
+import CandidateService from "../services/CandidateService";
+import RecruiterService from "../services/RecruiterService";
 
 export const Login = () => {
-  //Using React Hooks
   const [email, setEmail] = useState('');
   const [motDePasse ,setPassword] = useState('');
   const navigate = useNavigate();
@@ -14,6 +14,30 @@ export const Login = () => {
   useEffect(() => {
 
   }, []);
+
+  async function getInitialUserData(userId, userRole){
+    if(userRole === 'CANDIDAT'){
+      try {
+        const response = await CandidateService.getCandidateProfileRequest(userId);
+        if(response.status === 200){
+          localStorage.setItem('candidat', JSON.stringify(response.data));
+        }
+      } catch(error){
+          console.error(error);
+      }
+    } else if(userRole === 'RECRUTEUR'){
+      try {
+        const response = await RecruiterService.getRecruiterProfileRequest(userId);
+        if(response.status === 200){
+          localStorage.setItem('recruiter', JSON.stringify(response.data));
+        }
+      } catch(error){
+        console.error(error);
+      }
+    }
+
+  }
+
   //Handling the login logic
   const handleSignIn = async(e)=>{
     e.preventDefault(); 
@@ -21,7 +45,7 @@ export const Login = () => {
       const response = await AuthService.login({email, motDePasse});
       console.log("email:", email);
       console.log("motDePasse", motDePasse);
-      //here checking the response status is more reliable than checking the response data
+
       if(response.data.code === 'AUTH_ERROR'){
         setMessage("Email ou mot de passe incorrect");
       }
@@ -30,13 +54,15 @@ export const Login = () => {
         if(localStorage.getItem('user')){
           console.log(localStorage.getItem('user'));
         }
+        await getInitialUserData(response.data.id,response.data.role);
         navigate('/candidateProfile');
       } else if(response.status === 200 && response.data.role==='RECRUTEUR'){
         localStorage.setItem('user', JSON.stringify(response.data));
         if(localStorage.getItem('user')){
           console.log(localStorage.getItem('user'));
         }
-        console.log("you are a recruiter u")
+        await getInitialUserData(response.data.id,response.data.role);
+        console.log("User Type : Recruiter")
         navigate('/recruiterProfile');
       } else {
         setMessage('Invalid credentials');

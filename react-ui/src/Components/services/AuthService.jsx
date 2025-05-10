@@ -22,19 +22,15 @@ class AuthService{
     }
 
     logout(){
+        const user = JSON.parse(localStorage.getItem('user'));
+        if(user.role === 'CANDIDAT'){
+            localStorage.removeItem('candidat');
+        } else if (user.role === 'RECRUTEUR'){
+            localStorage.removeItem('recruiter');
+        }
         localStorage.removeItem('user');
-    }
 
-    // No need for this anymore since we used the axios interceptors
-    // getAuthHeader(){
-    //     const user = JSON.parse(localStorage.getItem('user'));
-    //     if (user && user.token){
-    //         return {
-    //              Authorization: 'Bearer' + user.token
-    //         };} else {
-    //             return {};
-    //         }
-    // }
+    }
 
     getCurrentUser(){
         return JSON.parse(localStorage.getItem('user'));
