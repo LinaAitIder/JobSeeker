@@ -1,6 +1,7 @@
 package com.jobapp.dto.request;
 
-import com.jobapp.model.Certification;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -9,10 +10,10 @@ public class UpdateCandidatProfileRequest {
     private String prenom;
     private String ville;
     private String pays;
-    private String telephone;;
+    private String telephone;
     private String cvPath;
     private List<CertificationRequest> certifications;
-    private String photoProfilPath;
+    private MultipartFile photoProfilFile;
 
 
     public String getNom() { return nom; }
@@ -56,11 +57,7 @@ public class UpdateCandidatProfileRequest {
     public void setCertifications(List<CertificationRequest> certifications) {
         this.certifications = certifications; }
 
-    public String getPhotoProfilPath() {
-        return photoProfilPath;
-    }
+    public MultipartFile getPhotoProfilFile() { return photoProfilFile; }
 
-    public void setPhotoProfilPath(String photoProfilPath) {
-        this.photoProfilPath = photoProfilPath;
-    }
+    public void setPhotoProfilFile(MultipartFile photoProfilFile) { this.photoProfilFile = photoProfilFile; }
 }

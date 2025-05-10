@@ -1,7 +1,11 @@
 package com.jobapp.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jobapp.config.FileStorageProperties;
 import com.jobapp.dto.exception.NotFoundException;
+import com.jobapp.dto.request.CertificationRequest;
 import com.jobapp.dto.request.UpdateCandidatProfileRequest;
 import com.jobapp.dto.request.UpdatePasswordRequest;
 import com.jobapp.dto.response.*;
@@ -38,18 +42,21 @@ public class CandidatController {
     private final FileStorageProperties fileStorageProperties;
     private final CandidatRepository candidatRepository;
     private final CertificationService certificationService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public CandidatController(CandidatService candidatService,
                               FileStorageService fileStorageService,
                               FileStorageProperties fileStorageProperties,
                               CandidatRepository candidatRepository,
-                              CertificationService certificationService) {
+                              CertificationService certificationService,
+                              ObjectMapper objectMapper) {
         this.candidatService = candidatService;
         this.fileStorageService = fileStorageService;
         this.fileStorageProperties = fileStorageProperties;
         this.candidatRepository = candidatRepository;
         this.certificationService = certificationService;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/{id}")
@@ -57,10 +64,43 @@ public class CandidatController {
         return candidatService.getCandidatProfile(id);
     }
 
-    @PutMapping("/{id}/profile")
+    @PutMapping(value = "/{id}/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateCandidatProfile(
             @PathVariable Long id,
-            @RequestBody UpdateCandidatProfileRequest request) {
+            @RequestParam(value = "nom", required = false) String nom,
+            @RequestParam(value = "prenom", required = false) String prenom,
+            @RequestParam(value = "ville", required = false) String ville,
+            @RequestParam(value = "pays", required = false) String pays,
+            @RequestParam(value = "telephone", required = false) String telephone,
+            @RequestParam(value = "cvPath", required = false) String cvPath,
+            @RequestParam(value = "photoProfil", required = false) MultipartFile photoProfil,
+            @RequestParam(value = "certifications", required = false) String certificationsJson) {
+
+        // Creer l'objet request
+        UpdateCandidatProfileRequest request = new UpdateCandidatProfileRequest();
+        request.setNom(nom);
+        request.setPrenom(prenom);
+        request.setVille(ville);
+        request.setPays(pays);
+        request.setTelephone(telephone);
+        request.setCvPath(cvPath);
+        request.setPhotoProfilFile(photoProfil);
+
+        // Gérer les certifications si présentes
+        if (certificationsJson != null && !certificationsJson.isEmpty()) {
+            try {
+                List<CertificationRequest> certifications = objectMapper.readValue(
+                        certificationsJson,
+                        new TypeReference<List<CertificationRequest>>() {}
+                );
+                request.setCertifications(certifications);
+            } catch (JsonProcessingException e) {
+                return ResponseEntity.badRequest().body(
+                        new ErrorResponse("INVALID_CERTIFICATIONS", "Format des certifications invalide")
+                );
+            }
+        }
+
         return candidatService.updateCandidatProfile(id, request);
     }
 
