@@ -95,8 +95,33 @@ public class FileStorageService {
     }
 
     public String storeLettreMotivation(MultipartFile file, Long candidatId, Long offreId) {
-        String subfolder = "lettres-motivation/" + candidatId;
-        return storeFile(file, subfolder, offreId); // Utilise l'ID de l'offre comme partie du nom de fichier
+        try {
+            // Créer le dossier spécifique pour cette candidature
+            Path userFolder = this.fileStorageLocation
+                    .resolve("lettres-motivation")
+                    .resolve(candidatId.toString())
+                    .resolve(offreId.toString());
+            Files.createDirectories(userFolder);
+
+            // Génere un nom de fichier sécurisé
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+            fileName = "lettre_" + System.currentTimeMillis() + "_" + fileName;
+
+            // Vérifie les injections de chemin
+            if (fileName.contains("..")) {
+                throw new FileStorageException("Nom de fichier invalide : " + fileName);
+            }
+
+            // Copie le fichier
+            Path targetLocation = userFolder.resolve(fileName);
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            // Retourne le chemin relatif complet
+            return "/lettres-motivation/" + candidatId + "/" + offreId + "/" + fileName;
+        } catch (IOException ex) {
+            throw new FileStorageException(
+                    "Échec de l'enregistrement de la lettre de motivation " + file.getOriginalFilename(), ex);
+        }
     }
 
     public Path getFilePath(String relativePath) {

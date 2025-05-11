@@ -62,7 +62,7 @@ public class CandidatureServiceImpl implements CandidatureService {
             OffreEmploi offre = offreRepository.findById(offreId)
                     .orElseThrow(() -> new NotFoundException("Offre non trouvée"));
 
-            // 3. Gestion de la lettre de motivation... (le reste reste inchangé)
+            // 3. Gestion de la lettre de motivation...
             String lettrePath = null;
             if (request.getLettreMotivationFile() != null && !request.getLettreMotivationFile().isEmpty()) {
                 if (!"application/pdf".equals(request.getLettreMotivationFile().getContentType())) {
@@ -71,8 +71,10 @@ public class CandidatureServiceImpl implements CandidatureService {
                 lettrePath = fileStorageService.storeLettreMotivation(
                         request.getLettreMotivationFile(),
                         candidatId,
-                        offreId
-                );
+                        offreId);
+
+                // Ajoutez un log pour vérifier le chemin généré
+                logger.info("Lettre de motivation stockée à : {}", lettrePath);
             }
 
             // 4. Création et sauvegarde
