@@ -53,7 +53,7 @@ const CandidateMainHeader = () => {
         <header className="bg-blue-500 p-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center relative w-screen">
-                    <Link to="/MainHome" className="text-white text-2xl" style={{ fontFamily: 'poppins' }}>
+                    <Link to="/CandidateMainHome" className="text-white text-2xl" style={{ fontFamily: 'poppins' }}>
                         Job Seeker
                     </Link>
                     <button className="text-white ml-4 lg:hidden absolute right-0" onClick={() => setIsMenuOpen(!isMenuOpen)}>
