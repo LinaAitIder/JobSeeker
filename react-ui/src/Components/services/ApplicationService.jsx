@@ -34,6 +34,16 @@ class ApplicationService{
         }
     }
 
+    getMotivationLetterRequest(applicationId){
+        try{
+            return api.get(`candidature/${applicationId}/lettre-motivation`, {
+                responseType:'blob'
+            });
+        } catch(err){
+            throw new Error(err);
+        }
+    }
+
 }
 
 export default new ApplicationService();
