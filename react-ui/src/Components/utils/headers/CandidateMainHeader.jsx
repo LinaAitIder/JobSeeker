@@ -44,7 +44,7 @@ const CandidateMainHeader = () => {
         navigate("/candidateProfile");
     }
     function Applications() {
-        navigate("/ApplicationList");
+        navigate("/Applications");
     }
 
 

@@ -23,6 +23,7 @@ import OffersPage from "./Components/offers/OffersPage";
 import ApplicationForm from "./Components/applications/ApplicationForm";
 import ApplyButton from "./Components/applications/ApplyButton";
 import ApplicationList from "./Components/applications/ApplicationList";
+import Applications from "./Components/applications/Applications";
 
 
 function App() {
@@ -52,6 +53,8 @@ function App() {
             <Route path="/ApplicationForm" element={<ApplicationForm/>}/>
             <Route path="/ApplyButton" element={<ApplyButton/>}/>
             <Route path="/ApplicationList" element={<ApplicationList/>}/>
+            <Route path="/Applications" element={<Applications/>}/>
+
 
         </Route>
 
