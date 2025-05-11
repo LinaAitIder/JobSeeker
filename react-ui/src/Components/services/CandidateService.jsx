@@ -108,6 +108,13 @@ class CandidateService{
         }
     }
 
+    getCandidateCertificatesRequest(candidateId){
+        try {
+            return api.get(`/candidat/${candidateId}/candidature`);
+        } catch(err){
+            console.log(err);
+        }
+    }
 
 
 
