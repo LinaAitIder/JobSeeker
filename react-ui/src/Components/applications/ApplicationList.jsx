@@ -1,24 +1,43 @@
 import { useEffect, useState } from "react";
-import api from "../../api/axiosConfig";
+import CandidateService from "../services/CandidateService";
+import DataMapper from "../utils/DataMapper";
+import ApplicationService from "../services/ApplicationService";
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
-export default function ApplicationList() {
-    const candidateId = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
+export default function ApplicationList({candidateId}) {
     const [applications, setApplications] = useState([]);
+    const [motivationLetter, setMotivationLetter] = useState('');
+
+    const fomattingDateUntilNow = (applicationDate)=>{
+        const startDate = dayjs(applicationDate);
+        dayjs.extend(relativeTime)
+        return startDate.fromNow();
+    }
+    const fetchMotivationLetter = async(applicationId) =>{
+        try{
+            const response = await ApplicationService.getMotivationLetterRequest(applicationId);
+            if(response.status === 200){
+                const motivationLetterFile = new Blob(response.data);
+                const motivationLetterPath = URL.createObjectURL(motivationLetterFile);
+                setMotivationLetter(motivationLetterPath);
+            }
+        } catch(err){
+            console.error(err);
+        }
+    }
 
     useEffect(() => {
         if (!candidateId) return;
-
         const fetchApplications = async () => {
             try {
-                const res = await api.get(`/candidat/${candidateId}/candidature`);
+                const res = await CandidateService.getCandidateCertificatesRequest(candidateId);
 
                 const mappedData = res.data.map(app => ({
-                    applyDate: app.datePostulation,
-                    recruiterMessage: app.messageRecruteur,
-                    status: app.statut,
-                    motivationLetterPath: app.lettreMotivationPath,
-                }));
-
+                        newapp:DataMapper.mapApplicationToEnglish(app),
+                    }
+                ));
+                console.log(mappedData);
                 setApplications(mappedData);
                 if(res.status === 200 || 201){
                     console.log("successfuly Fetched");
@@ -29,6 +48,7 @@ export default function ApplicationList() {
         };
 
         fetchApplications();
+        fetchMotivationLetter()
     }, [candidateId]);
 
 
@@ -45,18 +65,25 @@ export default function ApplicationList() {
                         </div>
 
                         <div className="text-sm text-gray-700 mb-4">
-                            <p>
-                                <span className="font-medium">Message to recruiter:</span>{" "}
-                                {app.recruiterMessage || "None"}
+                            <div>
+                                <span className="font-medium">Message to recruiter : </span>
+                                <span className="text-wrap">{app.newapp.recruiterMessage || "None"}</span>
+                            </div>
+                            <p className="mt-2">
+                                <span className="font-small font-medium">Applied : </span>
+                                {
+                                    fomattingDateUntilNow(app.newapp.applyDate)
+                                }
                             </p>
                             <p className="mt-2">
+                                <span className="font-small font-medium">Status :</span> {app.newapp.status}
                             </p>
                         </div>
 
                         <div className="flex justify-between items-center">
                             {app.motivationLetterPath && (
                                 <>
-                                    {/*Will Display more information in the next commits*/}
+                                    {fetchMotivationLetter(app.id)}
                                 </>
                             )}
                         </div>
