@@ -74,4 +74,13 @@ export default class DataMapper {
         };
     }
 
+
+    static mapApplicationToEnglish(frenshApplication){
+        return {
+            applyDate: frenshApplication.datePostulation,
+            recruiterMessage: frenshApplication.messageRecruteur,
+            status: frenshApplication.statut,
+            motivationLetterPath: frenshApplication.lettreMotivationPath,
+        };
+    }
 }
