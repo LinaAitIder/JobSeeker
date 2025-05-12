@@ -14,7 +14,9 @@ export default class CandidateInfoManager extends React.Component{
             countries :[],
             connected :true,
             imgUrl :'',
-            candidateId : props.candidateId
+            candidateId : props.candidateId,
+            successfulMsg : null,
+            isUpdated : false,
         };
         this.updateInfoData = this.updateInfoData.bind(this);
         this.handleImageChange = this.handleImageChange.bind(this);
@@ -22,6 +24,7 @@ export default class CandidateInfoManager extends React.Component{
     }
 
     componentDidMount(){
+
         console.log("CandidatInfoForm ...")
         //Loading Candidat Information
         api.get(`/candidat/${this.state.candidateId}`)
@@ -63,11 +66,18 @@ export default class CandidateInfoManager extends React.Component{
 
         })
 
+        this.setState({
+            successfulMsg : null,
+        })
+
     }
 
     async updateInfoData() {
         const candidateData = DataMapper.mapCandidateToFrench(this.state.currStateCandidate);
         const formData = new FormData();
+        this.setState({
+            isUpdated : true,
+        })
         console.log(candidateData);
         Object.keys(candidateData).forEach(key => {
             formData.append(key, candidateData[key]);
@@ -82,8 +92,10 @@ export default class CandidateInfoManager extends React.Component{
             if (response.status === 200) {
                 this.setState({
                     successfulMsg: true ,
-                    imgUrl : ppPath
+                    imgUrl : ppPath,
+                    isUpdated : true
                 });
+                window.location.reload();
             }
         } catch (error) {
             console.error(error);
@@ -212,15 +224,20 @@ export default class CandidateInfoManager extends React.Component{
                                 }
                             }))}}/>
                     </div>
-                    <hr/>
-                    { this.state.successfulMsg?
-                        <Message type="success" text="Uploaded Successfully!" />
-                        :
-                        <Message type="error" text="A problem occured! Please try again." />
-                    }
+
                     <div className="mt-6">
                         <button type="button" className="bg-blue-600 rounded-xl px-5 py-3 text-white m-2 shadow" onClick={this.updateInfoData}>Save</button>
                     </div>
+
+                    { this.state.isUpdated && (
+                        this.state.successfulMsg ? (
+                            <Message type="success" text="Uploaded Successfully! please refresh the page" />
+                        ):(
+                            <Message type="error" text="A problem occurred! Please try again." />
+                        )
+                    )
+
+                    }
                 </div>
             </>
 
