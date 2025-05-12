@@ -32,12 +32,7 @@ export default function CVUploader({onFileSelect}){
 
             </div>
             )}
-            {
-                !file && (
-                    <span>no file detected</span>
-            )
 
-        }
 
         </div>
     );

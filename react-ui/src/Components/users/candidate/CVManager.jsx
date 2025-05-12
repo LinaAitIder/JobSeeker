@@ -1,8 +1,8 @@
 import CVUploader from "../../utils/FileManager/CVUploader";
 import Message from "../../utils/Message";
 import React from "react";
-import candidateService from "../../services/CandidateService";
 import api from "../../../api/axiosConfig";
+import CandidateService from "../../services/CandidateService";
 
 
  class CVManager extends React.Component{
@@ -14,11 +14,14 @@ import api from "../../../api/axiosConfig";
               cvUpStatus:false,
               successfulMsg:'',
               cvUrl:'',
+              cvIsUpdated : false,
+
           };
           this.uploadInitialCV=this.uploadInitialCV.bind(this);
           this.handleFileSelect=this.handleFileSelect.bind(this);
           this.updateCV = this.updateCV.bind(this);
           this.getCvFullPath = this.getCvFullPath.bind(this);
+
 
       }
       componentDidMount() {
@@ -52,20 +55,28 @@ import api from "../../../api/axiosConfig";
         InitialCvFile.append('file', selectedCVFile);
         console.log(InitialCvFile.Type);
         try {
-            const response = await candidateService.uploadCvRequest(InitialCvFile,this.state.candidateId);
+            const response = await CandidateService.uploadCvRequest(InitialCvFile,this.state.candidateId);
             if(response.status === 200 || 204 ){
                 this.setState ({
 
-                    cvUpStatus : true
+                    cvUpStatus : true,
+                    cvIsUpdated : true
+
                 })
             } else {
                 this.setState ({
-                    cvUpStatus : false
+                    cvUpStatus : false,
+                    cvIsUpdated : true
+
                 })
             }
         } catch(err){
+            this.setState ({
+                cvIsUpdated : true
+            })
             console.error(err);
             throw new Error(err);
+
         }
     }
       async updateCV(){
@@ -73,24 +84,29 @@ import api from "../../../api/axiosConfig";
         const UpdatedCvFile = new FormData();
         UpdatedCvFile.append('file', selectedCVFile);
         try {
-            const response = await candidateService.updateCvRequest(UpdatedCvFile,this.state.candidateId);
+            const response = await CandidateService.updateCvRequest(UpdatedCvFile,this.state.candidateId);
             if(response.status === 200 || 204 ){
                 this.setState ({
-                    cvUpStatus : true
+                    cvUpStatus : true,
+                    cvIsUpdated : true
                 })
             } else {
                 this.setState ({
-                    cvUpStatus : false
+                    cvUpStatus : false,
+                    cvIsUpdated : true
                 })
             }
         } catch(err){
+            this.setState ({
+                cvIsUpdated : true
+            })
             console.error(err);
             throw new Error(err);
         }
     }
       async getCvFullPath(){
         try {
-            const response = await candidateService.getCvRequest(this.state.candidateId);
+            const response = await CandidateService.getCvRequest(this.state.candidateId);
             if(response.status === 200 || 204 ){
                 const pdfBlob = new Blob([response.data], {type:'application/pdf'});
                 const pdfUrl = URL.createObjectURL(pdfBlob);
@@ -115,7 +131,7 @@ import api from "../../../api/axiosConfig";
                 <h2 className="text-2xl font-semibold text-blue-800 mb-4">CV</h2>
                 <CVUploader onFileSelect={this.handleFileSelect}/>
                 <div className="mt-2">
-                    {this.state.cvPath ? (
+                    {this.state.cvUrl ? (
                         <div>
                             <a href={this.state.cvUrl}>Click to view the file</a>
                             <p className="text-green-600">CV Already Uploaded</p>
@@ -128,21 +144,15 @@ import api from "../../../api/axiosConfig";
                         </div>
                     )}
                 </div>
-                { this.state.cvUpStatus ? (
-                    <Message type="success" text="Successfully Uploaded!" timeout={10000}/>
-                ):(
-                    <Message type="error" text="Not proprely uploaded!" timeout={10000}/>
+                {this.state.cvIsUpdated && (
+                   this.state.successfulMsg ? (
+                       <Message type="success" text="Successfully Saved!" timeout={10000}/>
 
-                )
-                }
-                { this.state.successfulMsg? (
-                        <Message type="success" text="Successfully Saved!" timeout={10000}/>
-                    )
-                    :(
-                        <Message type="error" text="Not Saved Proprely, please Retry!" timeout={10000}/>
-                    )
+                   ):(
+                       <Message type="error" text="Not Saved Proprely, please Retry!" timeout={10000}/>
 
-                }
+                   )
+                )}
 
             </div>
         );
