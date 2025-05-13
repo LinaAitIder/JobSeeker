@@ -60,7 +60,7 @@ class CandidateProfile extends React.Component {
               </TabPanel>
 
               <TabPanel>
-                  <ApplicationList candidatId={USER_ID}/>
+                  <ApplicationList candidateId={USER_ID}/>
               </TabPanel>
 
               <TabPanel>

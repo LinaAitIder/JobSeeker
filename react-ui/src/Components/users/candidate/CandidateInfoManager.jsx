@@ -26,13 +26,16 @@ export default class CandidateInfoManager extends React.Component{
     componentDidMount(){
 
         console.log("CandidatInfoForm ...")
+        console.log(this.state.candidateId);
         //Loading Candidat Information
         api.get(`/candidat/${this.state.candidateId}`)
             .then((response) => {
-
+                console.log(response.data);
                 const apiData = response.data;
+                console.log("This is the parted Data :", apiData);
+
                 const apiDataT = DataMapper.mapCandidateToEnglish(apiData);
-                console.log("fetchedData :",apiDataT);
+                console.log("fetchedFormattedData :",apiDataT);
 
                 this.setState({
                     currStateCandidate: {
@@ -66,9 +69,6 @@ export default class CandidateInfoManager extends React.Component{
 
         })
 
-        this.setState({
-            successfulMsg : null,
-        })
 
     }
 
@@ -95,7 +95,10 @@ export default class CandidateInfoManager extends React.Component{
                     imgUrl : ppPath,
                     isUpdated : true
                 });
-                window.location.reload();
+                setTimeout(()=>{
+                    window.location.reload();
+
+                }, 1000)
             }
         } catch (error) {
             console.error(error);
@@ -231,7 +234,7 @@ export default class CandidateInfoManager extends React.Component{
 
                     { this.state.isUpdated && (
                         this.state.successfulMsg ? (
-                            <Message type="success" text="Uploaded Successfully! please refresh the page" />
+                            <Message type="success" text="Uploaded Successfully!" />
                         ):(
                             <Message type="error" text="A problem occurred! Please try again." />
                         )

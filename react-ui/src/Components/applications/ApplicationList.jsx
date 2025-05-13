@@ -7,35 +7,24 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 export default function ApplicationList({candidateId}) {
     const [applications, setApplications] = useState([]);
-    const [motivationLetter, setMotivationLetter] = useState('');
+    const [motivationLetterPath, setMotivationLetterPath] = useState('');
 
     const fomattingDateUntilNow = (applicationDate)=>{
         const startDate = dayjs(applicationDate);
         dayjs.extend(relativeTime)
         return startDate.fromNow();
     }
-    const fetchMotivationLetter = async(applicationId) =>{
-        try{
-            const response = await ApplicationService.getMotivationLetterRequest(applicationId);
-            if(response.status === 200){
-                const motivationLetterFile = new Blob(response.data);
-                const motivationLetterPath = URL.createObjectURL(motivationLetterFile);
-                setMotivationLetter(motivationLetterPath);
-            }
-        } catch(err){
-            console.error(err);
-        }
-    }
+
 
     useEffect(() => {
         if (!candidateId) return;
+
         const fetchApplications = async () => {
             try {
                 const res = await CandidateService.getCandidateCertificatesRequest(candidateId);
 
-                const mappedData = res.data.map(app => ({
-                        newapp:DataMapper.mapApplicationToEnglish(app),
-                    }
+                const mappedData = res.data.map(app => (
+                        DataMapper.mapApplicationToEnglish(app)
                 ));
                 console.log(mappedData);
                 setApplications(mappedData);
@@ -47,8 +36,21 @@ export default function ApplicationList({candidateId}) {
             }
         };
 
+        const fetchMotivationLetter = async(applicationId) =>{
+            try{
+                const response = await ApplicationService.getMotivationLetterRequest(applicationId);
+                if(response.status === 200){
+                    const motivationLetterFile = new Blob(response.data);
+                    const motivationLetterPath = URL.createObjectURL(motivationLetterFile);
+                    setMotivationLetterPath(motivationLetterPath);
+                }
+            } catch(err){
+                console.error(err);
+            }
+        }
+
+        fetchMotivationLetter();
         fetchApplications();
-        fetchMotivationLetter()
     }, [candidateId]);
 
 
@@ -65,27 +67,26 @@ export default function ApplicationList({candidateId}) {
                         </div>
 
                         <div className="text-sm text-gray-700 mb-4">
+
                             <div>
                                 <span className="font-medium">Message to recruiter : </span>
-                                <span className="text-wrap">{app.newapp.recruiterMessage || "None"}</span>
+                                <span className="text-wrap">{app.recruiterMessage || "None"}</span>
                             </div>
                             <p className="mt-2">
                                 <span className="font-small font-medium">Applied : </span>
                                 {
-                                    fomattingDateUntilNow(app.newapp.applyDate)
+                                    fomattingDateUntilNow(app.applyDate)
                                 }
                             </p>
                             <p className="mt-2">
-                                <span className="font-small font-medium">Status :</span> {app.newapp.status}
+                                <span className="font-small font-medium">Status :</span> {app.status}
                             </p>
                         </div>
 
                         <div className="flex justify-between items-center">
-                            {app.motivationLetterPath && (
-                                <>
-                                    {fetchMotivationLetter(app.id)}
-                                </>
-                            )}
+                                <a href={motivationLetterPath} className="text-blue-500 text-sm">
+                                    Click to view motivation letter
+                                </a>
                         </div>
                     </div>
                 ))
