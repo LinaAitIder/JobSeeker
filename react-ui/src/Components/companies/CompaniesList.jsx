@@ -1,13 +1,14 @@
 import React from 'react';
 import CandidateMainHeader from '../utils/headers/CandidateMainHeader';
 import CompanyService from "../services/CompanyService";
+import DataMapper from "../utils/DataMapper";
 
-// Class Component
 export class CompaniesList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             companies: [],
+            logoUrl : [],
             error: null
         };
         this.formatCompanyData = this.formatCompanyData.bind(this);
@@ -18,6 +19,9 @@ export class CompaniesList extends React.Component {
             const response = await CompanyService.fetchCompanies();
             if (response.status === 200) {
                 const formattedCompanies = this.formatCompanyData(response.data);
+                //debugging command- review fetched companies data
+                console.log(response.data);
+                console.log(formattedCompanies);
                 this.setState({ companies: formattedCompanies });
             } else {
                 throw new Error(`API returned status ${response.status}`);
@@ -28,18 +32,14 @@ export class CompaniesList extends React.Component {
                 error: 'Failed to load companies. Please try again later.'
             });
         }
+
     }
 
     formatCompanyData(apiData) {
-        return apiData.map(company => ({
-            id: company.id,
-            nom: company.nom,
-            description: company.description,
-            location: company.location,
-            taille: company.taille,
-            domaine: company.domaine,
-            logo_path: company.logoPath
-        }));
+        return apiData.map(company => (
+                DataMapper.mapCompanyToEnglish(company)
+        ));
+
     }
 
     render() {
@@ -70,7 +70,7 @@ export class CompaniesList extends React.Component {
                             >
                                 <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
                                     <img
-                                        src={company.logo_path || ""}
+                                        src={company.logoPath || ""}
                                         alt="Company Logo"
                                         className="max-h-full max-w-full object-contain"
                                         onError={(e) => e.target.src = "/placeholder-logo.png"}
@@ -78,7 +78,7 @@ export class CompaniesList extends React.Component {
                                 </div>
                                 <div className="p-4 space-y-2">
                                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                        {company.nom}
+                                        {company.name}
                                     </h3>
                                     <p className="text-sm text-gray-600 dark:text-gray-300">
                                         {company.description?.length > 100
@@ -99,7 +99,7 @@ export class CompaniesList extends React.Component {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                                   d="M12 14l9-5-9-5-9 5 9 5zm0 0v6"/>
                                         </svg>
-                                        <span>{company.domaine || "Unspecified domain"}</span>
+                                        <span>{company.domain || "Unspecified domain"}</span>
                                     </div>
                                     <div className="mt-3">
                                         <a

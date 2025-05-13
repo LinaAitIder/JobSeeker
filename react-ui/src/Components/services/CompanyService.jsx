@@ -12,6 +12,17 @@ class CompanyService {
         }
     }
 
+    getLogoCompanyRequest(companyId){
+         try {
+             return api.get(`/api/entreprises/${companyId}/logo`,{
+                 responseType:"blob",
+             });
+         } catch(err){
+             console.log(err);
+         }
+    }
+
+
     //Search Companies
 }
 

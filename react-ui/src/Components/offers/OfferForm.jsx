@@ -2,6 +2,7 @@ import {useState} from "react";
 import RecruiterService from "../services/RecruiterService";
 import DataMapper from "../utils/DataMapper";
 import Message from '../utils/Message'
+import RecruiterMainHeader from "../utils/headers/RecruiterMainHeader";
 
 export default function OfferForm(){
     console.log((JSON.parse(localStorage.getItem('user')).userId));
@@ -44,10 +45,9 @@ export default function OfferForm(){
 
     return (
         <>
-            <form
-                onSubmit={handleSubmit}
-                className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md grid grid-cols-1 gap-4"
-            >
+            <RecruiterMainHeader/>
+            <div className="flex justify-center items-center min-h-screen bg-gray-50">
+            <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md grid grid-cols-1 gap-4">
                 <h2 className="text-2xl font-semibold">Post a Job Offer</h2>
 
                 <input
@@ -155,6 +155,7 @@ export default function OfferForm(){
                     Submit
                 </button>
             </form>
+            </div>
             <Message type="success" text={message}/>
 
 
