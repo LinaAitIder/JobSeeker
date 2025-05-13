@@ -1,5 +1,6 @@
 package com.jobapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,6 +16,7 @@ public class Certification {
 
     @ManyToOne
     @JoinColumn(name = "candidat_id", nullable = false, columnDefinition = "BIGINT")
+    @JsonIgnore
     private Candidat candidat;
 
     public Certification() {}

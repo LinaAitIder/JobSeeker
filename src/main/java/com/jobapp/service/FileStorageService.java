@@ -91,7 +91,32 @@ public class FileStorageService {
     }
 
     public String storeCompanyLogo(MultipartFile file, Long companyId) {
-        return storeFile(file, "company-logos", companyId);
+        try {
+            // 1. Creer le dossier spécifique pour les logos d'entreprise
+            Path companyLogoFolder = this.fileStorageLocation
+                    .resolve("company-logos")
+                    .resolve(companyId.toString());
+            Files.createDirectories(companyLogoFolder);
+
+            // 2. Génere un nom de fichier sécurisé
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+            fileName = "logo_" + System.currentTimeMillis() + "_" + fileName;
+
+            // 3. Vérifie les injections de chemin
+            if (fileName.contains("..")) {
+                throw new FileStorageException("Nom de fichier invalide : " + fileName);
+            }
+
+            // 4. Copie le fichier
+            Path targetLocation = companyLogoFolder.resolve(fileName);
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            // 5. Retourne le chemin relatif complet
+            return "/company-logos/" + companyId + "/" + fileName;
+        } catch (IOException ex) {
+            throw new FileStorageException(
+                    "Échec de l'enregistrement du logo d'entreprise " + file.getOriginalFilename(), ex);
+        }
     }
 
     public String storeLettreMotivation(MultipartFile file, Long candidatId, Long offreId) {

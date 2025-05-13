@@ -10,7 +10,7 @@ public record EntrepriseResponse(
         @Nullable String location,
         @Nullable String taille,
         @Nullable String domaine,
-        @Nullable String logoUrl
+        @Nullable String logoPath
 ) {
     public EntrepriseResponse(Entreprise entreprise) {
         this(

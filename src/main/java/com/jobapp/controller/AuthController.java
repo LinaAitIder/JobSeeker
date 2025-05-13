@@ -149,7 +149,7 @@ public class AuthController {
     @RequestMapping(value = "/candidat/{id}/profile", method = RequestMethod.GET)
     public ResponseEntity<?> getCandidateProfile(@PathVariable Long id) {
         try {
-            CandidatProfileResponse profile = candidatService.getCandidatProfile(id).getBody(); // Modification ici
+            CandidatProfileResponse profile = candidatService.getCandidatProfile(id).getBody();
             return ResponseEntity.ok(profile);
         } catch (NotFoundException e) {
             return ResponseEntity.status(404).body(

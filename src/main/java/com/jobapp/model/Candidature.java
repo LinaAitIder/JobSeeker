@@ -81,7 +81,7 @@ public class Candidature {
         return lettreMotivationPath;
     }
 
-    public void setLettreMotivationPath(String lettreMotivation) {
+    public void setLettreMotivationPath(String lettreMotivationPath) {
         this.lettreMotivationPath = lettreMotivationPath;
     }
 
