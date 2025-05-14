@@ -2,7 +2,7 @@ import React from 'react';
 import CandidateMainHeader from '../../utils/headers/CandidateMainHeader';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import {Navigate} from "react-router-dom";
-import AccountManager from "./AccountManager";
+import AccountManager from "../AccountManager";
 import ApplicationList from "../../applications/ApplicationList";
 import CertificateManager from "./CertificationManager";
 import CandidateInfoManager from "./CandidateInfoManager";

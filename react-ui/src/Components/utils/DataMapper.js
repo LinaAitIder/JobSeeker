@@ -4,13 +4,27 @@ export default class DataMapper {
         return {
             nom: recruiter.firstName,
             prenom: recruiter.lastName,
-            entreprise: recruiter.company,
+            entrepriseNom: recruiter.company,
             email: recruiter.email,
+            photoProfilPath: recruiter. photoProfilPath,
             position: recruiter.position,
             telephone: recruiter.phone,
-            motDePasse: recruiter.password
         };
     }
+
+    static mapRecruiterToEnglish(recruiter) {
+        return {
+            firstName: recruiter.nom,
+            lastName: recruiter.prenom,
+            company: recruiter.entrepriseNom,
+            email: recruiter.email,
+            position: recruiter.position,
+            phone: recruiter.telephone,
+            photoProfilPath: recruiter. photoProfilPath
+
+        };
+    }
+
 
     static mapOfferToFrench(offer) {
         return {
@@ -44,6 +58,18 @@ export default class DataMapper {
         };
     }
 
+    static mapCandidateInfoToEnglish(frenchData) {
+        return {
+            id: frenchData.id,
+            profilePicture: frenchData.photoProfil,
+            firstName: frenchData.nom,
+            lastName: frenchData.prenom,
+            email: frenchData.email,
+            phoneNumber: frenchData.telephone,
+            city: frenchData.ville,
+            country: frenchData.pays
+        }
+    }
 
     static mapCandidateToEnglish(frenchData) {
         return {
@@ -83,4 +109,17 @@ export default class DataMapper {
             motivationLetterPath: frenshApplication.lettreMotivationPath,
         };
     }
+
+    static mapCompanyToEnglish(frenshCompanyData){
+        return{
+            id:frenshCompanyData.id,
+            name: frenshCompanyData.nom,
+            description:frenshCompanyData.description,
+            location: frenshCompanyData.location,
+            size: frenshCompanyData.taille,
+            domain: frenshCompanyData.domaine,
+            logoPath: frenshCompanyData.logoUrl
+        }
+    }
+
 }

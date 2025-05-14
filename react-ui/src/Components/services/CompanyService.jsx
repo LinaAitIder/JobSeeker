@@ -22,6 +22,15 @@ class CompanyService {
          }
     }
 
+    fetchCompany(companyId){
+        try{
+            return  api.get(`/entreprises`);
+        }catch(error){
+            console.log(error);
+            return error;
+        }
+    }A
+
 
     //Search Companies
 }

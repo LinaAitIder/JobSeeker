@@ -62,7 +62,6 @@ export const Login = () => {
           console.log(localStorage.getItem('user'));
         }
         await getInitialUserData(response.data.id,response.data.role);
-        console.log("User Type : Recruiter")
         navigate('/recruiterProfile');
       } else {
         setMessage('Invalid credentials');

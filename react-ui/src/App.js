@@ -18,19 +18,27 @@ import OfferForm from "./Components/offers/OfferForm";
 import RecruiterMainHeader from "./Components/utils/headers/RecruiterMainHeader";
 import CandidateMainHeader from "./Components/utils/headers/CandidateMainHeader";
 import RecruiterMainHome from "./Components/users/recruiter/RecruiterMainHome";
-import OfferList from "./Components/offers/OfferList";
 import OffersPage from "./Components/offers/OffersPage";
 import ApplicationForm from "./Components/applications/ApplicationForm";
 import ApplyButton from "./Components/applications/ApplyButton";
 import ApplicationList from "./Components/applications/ApplicationList";
 import Applications from "./Components/applications/Applications";
+import JobApplications from "./Components/applications/JobApplications"
+import CompanyInfoManager from './Components/companies/CompanyInfoManager'
+import {Logout} from "./drafts/Logout";
+
+
 
 
 function App() {
   return (
     <BrowserRouter className="bg-black">
+
       <Routes>
-        {/*Auth Routes  */}
+
+          <Route path="/logout" element={<Logout/>}/>
+
+          {/*Auth Routes  */}
          <Route element={<AuthRoute/>}>
           <Route path="/" element={<Home />} />
           <Route path="/candidatesignup" element={<CandidateSignUp />} />
@@ -48,8 +56,9 @@ function App() {
             <Route path="/candidateProfile" element={<CandidateProfile/>}/>
             <Route path="/CandidateMainHome" element={<CandidateMainHome/>} />
             <Route path="/CompaniesList" element={<CompaniesList/>}/>
-           <Route path="/OffersPage" element={<OffersPage/>}/>
+            <Route path="/OffersPage" element={<OffersPage/>}/>
             <Route path="/CandidateMainHeader" element={<CandidateMainHeader/>}/>
+            <Route path="/CandidateMainHome" element={<CandidateMainHome/>}/>
             <Route path="/ApplicationForm" element={<ApplicationForm/>}/>
             <Route path="/ApplyButton" element={<ApplyButton/>}/>
             <Route path="/ApplicationList" element={<ApplicationList/>}/>
@@ -61,9 +70,12 @@ function App() {
         {/* Proctected Routes - Only accessible for the recruiter */}
         <Route element={<ProtectedRoute allowedRole='RECRUTEUR'/>}>
             <Route path="/recruiterProfile" element={<RecruiterProfile/>}/>
-            <Route path="/offerForm" element={<OfferForm/>}/>\
+            <Route path="/offerForm" element={<OfferForm/>}/>
             <Route path="/RecruiterMainHome" element={<RecruiterMainHome/>}/>
             <Route path="/RecruiterMainHeader" element={<RecruiterMainHeader/>}/>
+            <Route path="/JobApplications" element={<JobApplications/>}/>
+            <Route path="/CompanyInfoManager" element={<CompanyInfoManager/>}/>
+
 
         </Route>
 

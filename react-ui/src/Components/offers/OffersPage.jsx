@@ -18,7 +18,6 @@ export default function OffersPage(){
                 console.log("fetched json offers ", res.data);
 
                 setOffers(res.data);
-                setMessage({type:"success", text:"offers fetched successfully"});
             }
         } catch(err){
             console.log("A problem occured : ", err.status)

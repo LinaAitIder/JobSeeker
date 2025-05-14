@@ -19,7 +19,7 @@ class RecruiterService{
 
     getRecruiterProfileRequest(recruiterId){
         try{
-            return  api.get(`/recruteur/${recruiterId}`);
+            return  api.get(`recruteur/${recruiterId}`);
         }catch(err){
             console.log(err);
             return err;
@@ -28,12 +28,22 @@ class RecruiterService{
 
     updateRecruiterRequest(updatedRecruiter, recruiterId){
         try{
-            return  api.put(`/recruteur/${recruiterId}`, updatedRecruiter);
+            return  api.patch(`auth/recruteur/${recruiterId}/complete-profile`, updatedRecruiter);
         }catch(err){
             console.log(err);
             return err;
         }
 
+    }
+
+    getPProfileRequest(recruiterId){
+        try {
+            return api.get(`/recruteur/${recruiterId}/photo`, {
+                responseType : "blob",
+            });
+        } catch(error){
+            console.log(error);
+        }
     }
 
     updatePhotoProfileRequest(formData, recruiterId){
