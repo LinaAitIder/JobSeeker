@@ -48,6 +48,12 @@ public class EntrepriseController {
         return ResponseEntity.ok(entrepriseService.getAllEntreprises());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EntrepriseResponse> getInfosEntreprise(@PathVariable Long id) {
+        EntrepriseResponse entreprise = entrepriseService.getEntrepriseById(id);
+        return ResponseEntity.ok(entreprise);
+    }
+
     @GetMapping("/{id}/logo")
     public ResponseEntity<Resource> getLogo(@PathVariable Long id) {
         try {

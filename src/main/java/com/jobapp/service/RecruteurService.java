@@ -3,6 +3,7 @@ package com.jobapp.service;
 import com.jobapp.dto.request.CreateOffreRequest;
 import com.jobapp.dto.request.UpdateRecruteurProfileRequest;
 import com.jobapp.dto.response.CandidatureResponse;
+import com.jobapp.dto.response.EntrepriseResponse;
 import com.jobapp.dto.response.OffreResponse;
 import com.jobapp.dto.response.RecruteurProfileResponse;
 import org.springframework.http.ResponseEntity;
@@ -21,4 +22,5 @@ public interface RecruteurService {
                                        String ancienMotDePasse,
                                        String nouveauMotDePasse);
     void updatePhotoProfil(Long id, String filename);
+    ResponseEntity<EntrepriseResponse> getEntrepriseByRecruteurId(Long recruteurId);
 }

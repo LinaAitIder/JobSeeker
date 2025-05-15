@@ -20,7 +20,9 @@ public record EntrepriseResponse(
                 entreprise.getLocation(),
                 entreprise.getTaille().name(),
                 entreprise.getDomaine(),
-                entreprise.getLogoPath()
+                entreprise.getLogoPath() != null ?
+                        "/api/entreprises/" + entreprise.getId() + "/logo"
+                        : null
         );
     }
 }

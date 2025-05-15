@@ -285,6 +285,18 @@ public class RecruteurServiceImpl implements RecruteurService {
     }
 
     @Override
+    public ResponseEntity<EntrepriseResponse> getEntrepriseByRecruteurId(Long recruteurId) {
+        Recruteur recruteur = recruteurRepository.findById(recruteurId)
+                .orElseThrow(() -> new NotFoundException("Recruteur non trouvé"));
+
+        if (recruteur.getEntreprise() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(new EntrepriseResponse(recruteur.getEntreprise()));
+    }
+
+    @Override
     public void updatePhotoProfil(Long id, String filename) {
         try {
             Recruteur recruteur = recruteurRepository.findById(id)
