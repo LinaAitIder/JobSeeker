@@ -2,6 +2,7 @@ package com.jobapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,6 +31,7 @@ public class SecurityConfig {
                         // Dans un vrai environnement, on utiliserait :
                         // .anyRequest().authenticated()
                         // Mais desactivé pour les besoins du prototype fonctionnel
+                        .requestMatchers(HttpMethod.PUT, "/api/recruteur/**").permitAll()
                         .anyRequest().permitAll()  // ← Toutes les routes sont accessibles sans auth
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -43,6 +45,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:3000"));  // Autorise le frontend
         config.setAllowedMethods(List.of("*"));  // GET, POST, PUT, DELETE, etc.
         config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Content-Disposition"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

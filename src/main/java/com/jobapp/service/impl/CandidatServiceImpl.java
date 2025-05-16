@@ -175,9 +175,13 @@ public class CandidatServiceImpl implements CandidatService {
             // 2. Recuperer les candidatures en utilisant candidatId
             List<Candidature> candidatures = candidatureRepository.findByCandidatId(candidatId);
 
+            // LOG pour vérifier les IDs avant mapping
+            candidatures.forEach(c ->
+                    logger.info("ID Candidature DB: {}", c.getId()));
             // 3. Mapper vers les DTO de reponse
             List<CandidatureResponse> responses = candidatures.stream()
                     .map(this::mapToCandidatureResponse)
+                    .peek(response -> logger.info("Candidature ID: {}", response.getId()))
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(responses);

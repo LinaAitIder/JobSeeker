@@ -43,6 +43,12 @@ public class RecruteurController {
         return recruteurService.getRecruteurProfile(id);
     }
 
+    @GetMapping("/{recruteurId}/entreprise")
+    public ResponseEntity<EntrepriseResponse> getEntrepriseByRecruteur(
+            @PathVariable Long recruteurId) {
+        return recruteurService.getEntrepriseByRecruteurId(recruteurId);
+    }
+
     @PutMapping(value = "/{id}/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateRecruteurProfile(
             @PathVariable Long id,

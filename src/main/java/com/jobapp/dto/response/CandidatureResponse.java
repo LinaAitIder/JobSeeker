@@ -1,10 +1,12 @@
 package com.jobapp.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 
 public class CandidatureResponse {
+    @JsonProperty("id")
     private final Long id;
     private final Long candidatId;
     private final Long offreId;

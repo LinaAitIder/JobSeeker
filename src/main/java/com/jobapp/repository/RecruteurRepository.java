@@ -1,6 +1,7 @@
 package com.jobapp.repository;
 
 import com.jobapp.model.Recruteur;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +21,9 @@ public interface RecruteurRepository extends JpaRepository<Recruteur, Long> {
 
     // Verifier si un mot de passe existe
     boolean existsByMotDePasse(String encryptedPassword);
+
+    @EntityGraph(attributePaths = {"entreprise"}) // Charge l'entreprise en eager
+    Optional<Recruteur> findWithEntrepriseById(Long id);
 
     @Modifying
     @Query("DELETE FROM OffreEmploi o WHERE o.recruteur.id = :recruteurId")
