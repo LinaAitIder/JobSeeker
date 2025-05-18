@@ -6,9 +6,10 @@ export default class DataMapper {
             prenom: recruiter.lastName,
             entrepriseNom: recruiter.company,
             email: recruiter.email,
-            photoProfilPath: recruiter. photoProfilPath,
             position: recruiter.position,
             telephone: recruiter.phone,
+            photoProfilPath: recruiter.profilePicture,
+
         };
     }
 
@@ -20,7 +21,7 @@ export default class DataMapper {
             email: recruiter.email,
             position: recruiter.position,
             phone: recruiter.telephone,
-            photoProfilPath: recruiter. photoProfilPath
+            profilePicture: recruiter.photoProfilPath
 
         };
     }

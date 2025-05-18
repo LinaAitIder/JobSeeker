@@ -69,6 +69,7 @@ export default class RecruiterInfoManager extends React.Component{
 
     async updateInfoData() {
         const recruiterData = DataMapper.mapRecruiterToFrench(this.state.currStateRecruiter);
+        console.log("this is the recruiter data " , recruiterData);
         const formData = new FormData();
         this.setState({
             isUpdated : true,
@@ -77,24 +78,25 @@ export default class RecruiterInfoManager extends React.Component{
         Object.keys(recruiterData).forEach(key => {
             formData.append(key, recruiterData[key]);
         })
+        console.log("this is the image of the recruiter before adding to db :", this.state.currStateRecruiter.profilePicture);
+
         if (this.state.currStateRecruiter.profilePicture instanceof File) {
-            formData.append('photoprofil', this.state.currStateRecruiter.profilePicture);
+            formData.append('photoProfil', this.state.currStateRecruiter.profilePicture);
         }
 
+
         try {
-            const response = await RecruiterService.updateRecruiterRequest(recruiterData,this.state.recruiterId);
-            const ppPath = response.data.photoProfil ; //check for errors
-            console.log(ppPath);
+            const response = await RecruiterService.updateRecruiterRequest(formData,this.state.recruiterId);
+            const ppPath = response.data.nom; //check for errors
+            console.log("this is the image path :",ppPath);
             if (response.status === 200) {
                 this.setState({
                     successfulMsg: true ,
                     imgUrl : ppPath,
                     isUpdated : true
                 });
-                setTimeout(()=>{
-                    window.location.reload();
+                console.log("this is the image path :",ppPath);
 
-                }, 1000)
             }
         } catch (error) {
             console.error(error);
@@ -111,8 +113,10 @@ export default class RecruiterInfoManager extends React.Component{
                     ...prevState.currStateRecruiter,
                     profilePicture: file,
                 },
-                imgUrl : imageUrl ,
+                imgUrl : imageUrl,
             }));
+            console.log("this is the image : ", imageUrl);
+
         }
     }
 

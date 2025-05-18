@@ -43,7 +43,8 @@ class CandidateService{
 
     getPProfileRequest(candidatId){
         try{
-            return  api.get(`/candidat/${candidatId}/photo`, {responseType: 'blob'});
+            return  api.get(`/candidat/${candidatId}/photo`,
+                {responseType: 'blob'});
         }catch(err){
             console.log(err);
             return err;

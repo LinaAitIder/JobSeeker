@@ -28,7 +28,12 @@ class RecruiterService{
 
     updateRecruiterRequest(updatedRecruiter, recruiterId){
         try{
-            return  api.put(`recruteur/${recruiterId}/profile`, updatedRecruiter);
+            return  api.put(`recruteur/${recruiterId}/profile`, updatedRecruiter,
+                 {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }}
+                );
         }catch(err){
             console.log(err);
             return err;
@@ -39,7 +44,7 @@ class RecruiterService{
     getPProfileRequest(recruiterId){
         try {
             return api.get(`/recruteur/${recruiterId}/photo`, {
-                responseType : "blob",
+                responseType : 'blob',
             });
         } catch(error){
             console.log(error);

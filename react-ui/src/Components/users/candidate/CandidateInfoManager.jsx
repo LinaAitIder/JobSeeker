@@ -219,7 +219,7 @@ export default class CandidateInfoManager extends React.Component{
 
                     <div>
                         <label className="block text-gray-700 mb-2">Phone Number</label>
-                        <input type="text" className="block w-full border p-2 rounded-md" value={this.state.currStateCandidate.phoneNumber || ''} onChange={(e)=>{
+                        <input type="text" className="block w-full border p-2 rounded-md" value={this.state.currStateCandidate.phone || ''} onChange={(e)=>{
                             this.setState(prevState=>({
                                 currStateCandidate: {
                                     ...prevState.currStateCandidate,
