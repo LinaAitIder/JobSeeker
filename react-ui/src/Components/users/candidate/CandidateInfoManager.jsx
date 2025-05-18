@@ -24,7 +24,7 @@ export default class CandidateInfoManager extends React.Component{
     }
 
     componentDidMount(){
-
+        if (!this.state.candidateId) return;
         console.log("CandidatInfoForm ...")
         console.log(this.state.candidateId);
         //Loading Candidat Information

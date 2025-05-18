@@ -16,6 +16,8 @@ const CandidateMainHeader = () => {
     console.log("user id",USER_ID)
 
     useEffect(() => {
+        if (!USER_ID) return;
+
         const fetchPP= async () =>{
             try {
                 console.log(USER_ID);
