@@ -11,9 +11,6 @@ export const Login = () => {
   const navigate = useNavigate();
   const [message, setMessage]= useState('');
 
-  useEffect(() => {
-
-  }, []);
 
   async function getInitialUserData(userId, userRole){
     if(userRole === 'CANDIDAT'){

@@ -30,29 +30,34 @@ export default function ApplicationList({candidateId}) {
                 setApplications(mappedData);
                 if(res.status === 200 || 201){
                     console.log("successfuly Fetched");
+
                 }
             } catch (err) {
                 console.error("Error fetching applications:", err);
             }
         };
 
-        const fetchMotivationLetter = async(applicationId) =>{
-            try{
-                const response = await ApplicationService.getMotivationLetterRequest(applicationId);
-                if(response.status === 200){
-                    const motivationLetterFile = new Blob(response.data);
-                    const motivationLetterPath = URL.createObjectURL(motivationLetterFile);
-                    setMotivationLetterPath(motivationLetterPath);
-                }
-            } catch(err){
-                console.error(err);
-            }
-        }
 
-        fetchMotivationLetter();
+
+        //fetchMotivationLetter();
         fetchApplications();
     }, [candidateId]);
 
+    const fetchMotivationLetter = async(applicationId) =>{
+        try{
+            const response = await ApplicationService.getMotivationLetterRequest(applicationId);
+            if(response.status === 200){
+                const motivationLetterFile = new Blob([response.data], { type: 'application/pdf' });
+                const motivationLetterUrl = URL.createObjectURL(motivationLetterFile);
+                console.log(motivationLetterUrl);
+                window.open(motivationLetterUrl);
+            } else {
+                console.warn("Unexpected response status:", response.status);
+            }
+        } catch(err){
+            console.error(err);
+        }
+    }
 
 
     return (
@@ -84,9 +89,12 @@ export default function ApplicationList({candidateId}) {
                         </div>
 
                         <div className="flex justify-between items-center">
-                                <a href={motivationLetterPath} className="text-blue-500 text-sm">
-                                    Click to view motivation letter
-                                </a>
+                            <button
+                                onClick={() => fetchMotivationLetter(app.id)}
+                                className="text-blue-500 text-sm underline"
+                            >
+                                Click to view motivation letter
+                            </button>
                         </div>
                     </div>
                 ))
