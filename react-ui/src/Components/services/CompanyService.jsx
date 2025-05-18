@@ -14,7 +14,7 @@ class CompanyService {
 
     getLogoCompanyRequest(companyId){
          try {
-             return api.get(`/api/entreprises/${companyId}/logo`,{
+             return api.get(`entreprises/${companyId}/logo`,{
                  responseType:"blob",
              });
          } catch(err){
@@ -24,12 +24,12 @@ class CompanyService {
 
     fetchCompany(companyId){
         try{
-            return  api.get(`/entreprises`);
+            return  api.get(`entreprises/${companyId}`);
         }catch(error){
             console.log(error);
             return error;
         }
-    }A
+    }
 
 
     //Search Companies

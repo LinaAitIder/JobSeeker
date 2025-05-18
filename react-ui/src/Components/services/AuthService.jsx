@@ -1,6 +1,7 @@
 import axios from 'axios';
-import {Navigate} from "react-router-dom";
 const API_BASE_URL = process.env.REACT_APP_API_URL;
+const user = JSON.parse(localStorage.getItem('user'));
+console.log(user);
 
 class AuthService{
 
@@ -22,7 +23,7 @@ class AuthService{
     }
 
     logout(){
-        const user = JSON.parse(localStorage.getItem('user'));
+        console.log(user);
         if(user.role === 'CANDIDAT'){
             localStorage.removeItem('candidat');
         } else if (user.role === 'RECRUTEUR'){
