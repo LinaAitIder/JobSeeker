@@ -103,6 +103,7 @@ export default class DataMapper {
 
     static mapApplicationToEnglish(frenshApplication){
         return {
+            id :frenshApplication.id,
             applyDate: frenshApplication.datePostulation,
             recruiterMessage: frenshApplication.messageRecruteur,
             status: frenshApplication.statut,

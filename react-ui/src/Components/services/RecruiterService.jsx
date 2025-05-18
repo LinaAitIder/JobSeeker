@@ -28,7 +28,7 @@ class RecruiterService{
 
     updateRecruiterRequest(updatedRecruiter, recruiterId){
         try{
-            return  api.patch(`auth/recruteur/${recruiterId}/complete-profile`, updatedRecruiter);
+            return  api.put(`recruteur/${recruiterId}/profile`, updatedRecruiter);
         }catch(err){
             console.log(err);
             return err;

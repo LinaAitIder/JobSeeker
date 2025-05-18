@@ -4,6 +4,7 @@ import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import AccountManager from "../AccountManager";
 import RecruiterInfoManager from "./RecruiterInfoManager";
 import CompanyInfoManager from "../../companies/CompanyInfoManager";
+import {Navigate} from "react-router-dom";
 
 const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
 
@@ -26,6 +27,9 @@ class RecruiterProfile extends React.Component {
 
 
     render() {
+        if(!this.state.connected){
+            return <Navigate to="/login"/>;
+        }
         return (
             <div>
                 <RecruiterMainHeader/>

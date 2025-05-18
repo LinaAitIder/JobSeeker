@@ -24,7 +24,7 @@ export default class RecruiterInfoManager extends React.Component{
     }
 
     componentDidMount(){
-
+        if(!this.state.recruiterId) return;
         console.log("RecruiterInfoForm ...")
         console.log(this.state.recruiterId);
         //Loading Candidat Information
@@ -80,8 +80,6 @@ export default class RecruiterInfoManager extends React.Component{
         if (this.state.currStateRecruiter.profilePicture instanceof File) {
             formData.append('photoprofil', this.state.currStateRecruiter.profilePicture);
         }
-
-
 
         try {
             const response = await RecruiterService.updateRecruiterRequest(recruiterData,this.state.recruiterId);

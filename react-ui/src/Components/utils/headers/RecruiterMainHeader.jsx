@@ -66,7 +66,7 @@ const CandidateMainHeader = () => {
                 </div>
                 <nav className="hidden lg:flex items-center justify-between space-x-10">
                     <Link to="/CandidatesList" className="text-white text-sm" style={{ fontFamily: 'poppins' }}>Candidates</Link>
-                    <Link to="/JobApplication" className="text-white text-sm" style={{ fontFamily: 'poppins' }}>Applications</Link>
+                    <Link to="/JobApplications" className="text-white text-sm" style={{ fontFamily: 'poppins' }}>Applications</Link>
 
                     <div className="p-1 relative group" >
                         <button  onClick={navigateToOfferForm} className="bg-blue-500 w-10 h-10 flex items-center justify-center text-white rounded-full hover:bg-blue-600">

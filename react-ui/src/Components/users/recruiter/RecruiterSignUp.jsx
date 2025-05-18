@@ -42,8 +42,8 @@ export const RecruiterSignUp = () => {
   return (
     <>
     <HomeHeader/>
-    <div className="h-full bg-black">
-      <form className='flex justify-center align-center p-12 flex-col sm:mx-auto sm:w-full s sm:max-w-sm'>
+    <div className="h-full bg-black p-0 pt-3 ">
+      <form className='flex justify-center place-content-center p-8 flex-col sm:mx-auto sm:w-full s sm:max-w-sm pb-1'>
       {message}
       <h1 className=" text-2xl/9 font-bold tracking-tight text-white mb-4 text-center font-serif">Organisation's Space</h1>
       <h1 className=" text-xl font-bold tracking-tight text-white mb-4 text-center font-serif">Sign Up</h1>
@@ -146,8 +146,13 @@ export const RecruiterSignUp = () => {
       </div>
       </div>
       <button className="p-3 mt-5 text-white bg-blue-500 rounded" type="submit" onClick={handleRegister}>Submit</button>
+
       </form>
-      {error && <Message type="error" text={message}/>}
+      <div className="flex justify-center place-content-center ">
+        {error && <Message type="error" text={message}/>}
+      </div>
+
+
     </div>
 
     </>
