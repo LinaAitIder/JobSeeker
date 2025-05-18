@@ -25,7 +25,9 @@ import CandidateService from "../../services/CandidateService";
 
       }
       componentDidMount() {
-         api.get(`candidat/${this.state.candidateId}/cv`, {
+          if (!this.state.candidateId) return;
+
+          api.get(`candidat/${this.state.candidateId}/cv`, {
              responseType:'blob'
          }).then((response)=>{
              if(response.status === 200  ){

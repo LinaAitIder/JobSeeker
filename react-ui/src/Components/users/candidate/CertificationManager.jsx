@@ -20,6 +20,7 @@ const CertificateManager = ({ candidateId }) => {
 
 
     useEffect(() => {
+        if(!candidateId) return;
         fetchCertificates();
     }, [candidateId]);
 

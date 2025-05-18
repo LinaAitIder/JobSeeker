@@ -9,8 +9,8 @@ export default class CompanyInfoManager extends React.Component{
         super(props);
         this.state={
             currStateCompany :{},
-            companyId:'',
-            logoUrl : ''
+            logoUrl : '',
+            recruiterId: props.recruiterId
         }
     }
 
@@ -18,21 +18,22 @@ export default class CompanyInfoManager extends React.Component{
 
 
         //Loading Company
-
-
-        //Loading ProfilePicture
-
+        this.fetchCompany();
+        this.fetchCompanyLogo();
 
 
     }
     async fetchCompany(){
         try {
-            const response = await CompanyService.fetchCompany();
+            const response = await CompanyService.fetchCompany(this.state.recruiterId);
             if(response.status === 200){
+                console.log(response.data);
+                const mappedCompanyData = DataMapper.mapCompanyToEnglish(response.data);
+                console.log("english company data :", mappedCompanyData);
                 this.setState({
-                    currCompanyState : response.data,
+                    currStateCompany : mappedCompanyData,
                 })
-
+                console.log(this.state.currStateCompany);
             }
         } catch(err){
             console.error(err);
@@ -41,12 +42,13 @@ export default class CompanyInfoManager extends React.Component{
 
      async fetchCompanyLogo(){
         try {
-            const response = await CompanyService.getLogoCompanyRequest(this.state.companyId);
+            const response = await CompanyService.getLogoCompanyRequest(this.state.currStateCompany.id);
             if(response.status === 200){
                 const image = new Blob(response.data);
                 this.setState({
                    logoUrl : URL.createObjectURL(image),
                 })
+                console.log(this.state.logoUrl);
 
             }
         } catch(err){
@@ -64,7 +66,6 @@ export default class CompanyInfoManager extends React.Component{
                 <div className="space-y-6" id="section1">
                     <h2 className="text-2xl font-semibold text-blue-800">Company's Information</h2>
 
-                    {/* Logo */}
                     <div className="m-10 flex flex-col items-center gap-2">
                         <div className="w-32 h-32">
                             <img
@@ -76,7 +77,6 @@ export default class CompanyInfoManager extends React.Component{
                         <p className="text-gray-600 text-sm">Company Logo</p>
                     </div>
 
-                    {/* Read-Only Fields */}
                     <div>
                         <label className="block text-gray-700 mb-1">Company Name</label>
                         <p className="p-2 border rounded-md bg-gray-50 text-gray-800">{currStateCompany.name}</p>
@@ -84,7 +84,7 @@ export default class CompanyInfoManager extends React.Component{
 
                     <div>
                         <label className="block text-gray-700 mb-1">Description</label>
-                        <p className="p-2 border rounded-md bg-gray-50 text-gray-800">{currStateCompany.lastName}</p>
+                        <p className="p-2 border rounded-md bg-gray-50 text-gray-800">{currStateCompany.description}</p>
                     </div>
 
                     <div>
