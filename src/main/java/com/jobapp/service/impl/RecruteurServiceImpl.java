@@ -311,13 +311,17 @@ public class RecruteurServiceImpl implements RecruteurService {
             Recruteur recruteur = recruteurRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Recruteur non trouvé"));
 
-            // 2. Supprimer les offres d'emploi associées (et leurs candidatures)
+            // 2. Supprimer d'abord les candidatures liees aux offres
+            List<OffreEmploi> offres = offreRepository.findByRecruteurId(id);
+            offres.forEach(offre -> candidatureRepository.deleteByOffreId(offre.getId()));
+
+            // 3. Supprimer les offres d'emploi
             offreRepository.deleteByRecruteurId(id);
 
-            // 3. Supprimer les fichiers
+            // 4. Supprimer les fichiers
             deleteFileSafely(recruteur.getPhotoProfilPath());
 
-            // 4. Supprimer le recruteur
+            // 5. Supprimer le recruteur
             recruteurRepository.delete(recruteur);
 
             return ResponseEntity.noContent().build();

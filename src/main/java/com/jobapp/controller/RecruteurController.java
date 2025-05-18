@@ -137,13 +137,6 @@ public class RecruteurController {
     @PreAuthorize("#id == authentication.principal.id && hasRole('RECRUTEUR')")
     public ResponseEntity<Void> deleteRecruteur(@PathVariable Long id) {
 
-        // Double vérification de sécurité
-        // UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-        // if (!principal.getId().equals(id)) {
-        //     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        // }
-        //ajouter Authentication authentication dans arguments
-
         return recruteurService.deleteRecruteur(id);
     }
 }
