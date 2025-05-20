@@ -35,6 +35,18 @@
       <version>2.15.3</version>
     </dependency>
 
+    <!-- Apache Tika pour extraire texte CV -->
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+      <version>2.9.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parsers-standard-package</artifactId>
+      <version>2.9.0</version>
+    </dependency>
+
     <!-- Jakarta Persistence API -->
     <dependency>
       <groupId>jakarta.persistence</groupId>
@@ -106,6 +118,8 @@
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
+
+
     <!-- Bean Validation -->
     <dependency>
       <groupId>org.hibernate.validator</groupId>
@@ -156,6 +170,12 @@
       <artifactId>jsr305</artifactId>
       <version>3.0.2</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+
     <!--Managing env Variables-->
 
   </dependencies>
@@ -167,8 +187,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.13.0</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>22</source>
+          <target>22</target>
           <release>${java.version}</release>
         </configuration>
       </plugin>
