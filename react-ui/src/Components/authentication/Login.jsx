@@ -1,9 +1,9 @@
 import {React, useEffect, useState} from 'react'
 import { useNavigate} from 'react-router-dom';
-import AuthService from '../services/AuthService';
+import AuthService from '../../services/AuthService';
 import HomeHeader from '../utils/headers/HomeHeader';
-import CandidateService from "../services/CandidateService";
-import RecruiterService from "../services/RecruiterService";
+import CandidateService from "../../services/CandidateService";
+import RecruiterService from "../../services/RecruiterService";
 
 export const Login = () => {
   const [email, setEmail] = useState('');

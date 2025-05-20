@@ -1,4 +1,4 @@
-import api from "../../api/axiosConfig";
+import api from "../api/axiosConfig";
 
 class ApplicationService{
 
@@ -18,9 +18,12 @@ class ApplicationService{
         }
     }
 
-    updateApplicationStatusRequest(applicationId){
+    updateApplicationStatusRequest(applicationId, newStatut){
         try{
-            return api.patch(`candidature/${applicationId}/status`);
+            return api.patch(`candidature/${applicationId}/statut`, null, {
+                params: {
+                    newStatut: newStatut
+                }});
         } catch(err){
              throw new Error(err);
         }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import CandidateService from "../services/CandidateService";
+import CandidateService from "../../services/CandidateService";
 import DataMapper from "../utils/DataMapper";
-import ApplicationService from "../services/ApplicationService";
+import ApplicationService from "../../services/ApplicationService";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 

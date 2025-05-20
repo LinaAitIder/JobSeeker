@@ -2,7 +2,7 @@ import React from 'react';
 import HomeHeader from '../../utils/headers/HomeHeader';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react'
-import AuthService from '../../services/AuthService';
+import AuthService from '../../../services/AuthService';
 
 const NewPassword = () => {
     const [newPassword, setNewPassword] = useState();

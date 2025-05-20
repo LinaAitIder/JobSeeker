@@ -3,8 +3,8 @@ import React, {useEffect, useState} from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
-import AuthService from "../../services/AuthService";
-import CandidateService from "../../services/CandidateService";
+import AuthService from "../../../services/AuthService";
+import CandidateService from "../../../services/CandidateService";
 
 const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
 

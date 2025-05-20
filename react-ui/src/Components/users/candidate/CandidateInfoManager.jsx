@@ -2,7 +2,7 @@ import React from "react";
 import Message from "../../utils/Message";
 import api from "../../../api/axiosConfig";
 import DataMapper from "../../utils/DataMapper";
-import CandidateService from "../../services/CandidateService";
+import CandidateService from "../../../services/CandidateService";
 
 
 

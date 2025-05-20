@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import AuthService from "../services/AuthService";
-import CandidateService from "../services/CandidateService";
+import AuthService from "../../services/AuthService";
+import CandidateService from "../../services/CandidateService";
 import {useNavigate} from "react-router-dom";
-import RecruiterService from "../services/RecruiterService";
+import RecruiterService from "../../services/RecruiterService";
 
 export default function AccountManager({connected, onConnectionChange}){
     const [loggedOut, setLoggedOut] = useState(false);

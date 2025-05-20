@@ -2,7 +2,7 @@ import CandidateMainHeader from "../utils/headers/CandidateMainHeader";
 import Message from "../utils/Message";
 import { useLocation } from "react-router-dom";
 import {useState} from "react";
-import ApplicationService from "../services/ApplicationService";
+import ApplicationService from "../../services/ApplicationService";
 
 export default function ApplicationForm(){
     const location= useLocation();

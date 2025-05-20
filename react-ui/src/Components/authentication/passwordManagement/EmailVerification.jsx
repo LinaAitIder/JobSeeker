@@ -2,7 +2,7 @@ import HomeHeader from "../../utils/headers/HomeHeader"
 import React, { useState } from "react";
 import emailjs from '@emailjs/browser';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../../services/AuthService';
+import AuthService from '../../../services/AuthService';
 
 
 function EmailVerification() {

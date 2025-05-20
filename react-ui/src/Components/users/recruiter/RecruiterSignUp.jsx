@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import AuthService from '../../services/AuthService';
+import AuthService from '../../../services/AuthService';
 import HomeHeader from '../../utils/headers/HomeHeader';
 import DataMapper from "../../utils/DataMapper";
 import Message from "../../utils/Message";
@@ -23,7 +23,7 @@ export const RecruiterSignUp = () => {
     try{
       const response = await AuthService.registerRecruiter(recruiterData);
       setMessage(response.data);
-      if(response.status === 200 || 201){
+      if(response.status === 200){
         navigate('/login')
       }
     }catch(error){

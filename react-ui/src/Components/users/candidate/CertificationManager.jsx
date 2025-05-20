@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ArrowUpTrayIcon, TrashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import api from "../../../api/axiosConfig";
-import CandidateService from "../../services/CandidateService";
+import CandidateService from "../../../services/CandidateService";
 import Message from "../../utils/Message";
 import CVUploader from "../../utils/FileManager/CVUploader";
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import api from "../../api/axiosConfig";
+import api from "../api/axiosConfig";
 
 class CompanyService {
     //Extracting CompaniesList Info

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import AuthService from '../Components/services/AuthService';
+import AuthService from '../services/AuthService';
 import { Navigate } from 'react-router-dom';
 
 const API_BASE_URL = "http://localhost:8080/api";

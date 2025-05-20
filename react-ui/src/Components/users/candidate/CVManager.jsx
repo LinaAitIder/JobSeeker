@@ -2,7 +2,7 @@ import CVUploader from "../../utils/FileManager/CVUploader";
 import Message from "../../utils/Message";
 import React from "react";
 import api from "../../../api/axiosConfig";
-import CandidateService from "../../services/CandidateService";
+import CandidateService from "../../../services/CandidateService";
 
 
  class CVManager extends React.Component{

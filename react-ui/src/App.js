@@ -23,14 +23,20 @@ import ApplicationForm from "./Components/applications/ApplicationForm";
 import ApplyButton from "./Components/applications/ApplyButton";
 import ApplicationList from "./Components/applications/ApplicationList";
 import Applications from "./Components/applications/Applications";
-import JobApplications from "./Components/applications/JobApplications"
 import CompanyInfoManager from './Components/companies/CompanyInfoManager'
 import {Logout} from "./drafts/Logout";
+import OfferApplications from "./Components/applications/OfferApplications";
+import RecruiterOfferList from "./Components/users/recruiter/RecruiterOfferList";
+import RecruiterOffersManager from "./Components/users/recruiter/RecruiterOffersManager";
+import RecruiterOffersPage from "./Components/users/recruiter/RecruiterOffersPage";
 
 
+const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
+const RECRUITER_ID=JSON.parse(localStorage.getItem('RECRUTEUR'))
 
 
 function App() {
+
   return (
     <BrowserRouter className="bg-black">
 
@@ -73,8 +79,11 @@ function App() {
             <Route path="/offerForm" element={<OfferForm/>}/>
             <Route path="/RecruiterMainHome" element={<RecruiterMainHome/>}/>
             <Route path="/RecruiterMainHeader" element={<RecruiterMainHeader/>}/>
-            <Route path="/JobApplications" element={<JobApplications/>}/>
+            <Route path="/RecruiterOfferList" element={<RecruiterOfferList/>}/>
+            <Route path="/RecruiterOffersManager" element={<RecruiterOffersManager/>}/>
+            <Route path="/RecruiterOffersPage" element={<RecruiterOffersPage/>}/>
             <Route path="/CompanyInfoManager" element={<CompanyInfoManager/>}/>
+            <Route path="/OfferApplications" element={<OfferApplications/>}/>
 
 
         </Route>

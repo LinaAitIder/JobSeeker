@@ -5,6 +5,7 @@ import AccountManager from "../AccountManager";
 import RecruiterInfoManager from "./RecruiterInfoManager";
 import CompanyInfoManager from "../../companies/CompanyInfoManager";
 import {Navigate} from "react-router-dom";
+import RecruiterOffersManager from "./RecruiterOffersManager";
 
 const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
 
@@ -52,6 +53,7 @@ class RecruiterProfile extends React.Component {
                                 <CompanyInfoManager recruiterId={USER_ID} />
                             </TabPanel>
                             <TabPanel>
+                                <RecruiterOffersManager recruiterId={USER_ID}/>
                             </TabPanel>
                             <TabPanel>
                                 <AccountManager connected={this.state.connected} onConnectionChange={this.handleConnectionChange}/>

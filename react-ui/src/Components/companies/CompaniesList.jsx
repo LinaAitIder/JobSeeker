@@ -1,6 +1,6 @@
 import React from 'react';
 import CandidateMainHeader from '../utils/headers/CandidateMainHeader';
-import CompanyService from "../services/CompanyService";
+import CompanyService from "../../services/CompanyService";
 import DataMapper from "../utils/DataMapper";
 
 export class CompaniesList extends React.Component {

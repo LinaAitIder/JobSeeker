@@ -1,6 +1,6 @@
 //Here we need to manage user services
 
-import api from "../../api/axiosConfig";
+import api from "../api/axiosConfig";
 
 class CandidateService{
 

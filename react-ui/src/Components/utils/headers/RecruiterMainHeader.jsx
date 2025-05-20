@@ -3,9 +3,9 @@ import React, {useEffect, useState} from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
-import AuthService from "../../services/AuthService";
-import CandidateService from "../../services/CandidateService";
-import RecruiterService from "../../services/RecruiterService";
+import AuthService from "../../../services/AuthService";
+import CandidateService from "../../../services/CandidateService";
+import RecruiterService from "../../../services/RecruiterService";
 import {PlusIcon} from "@heroicons/react/16/solid";
 
 const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
@@ -50,7 +50,9 @@ const CandidateMainHeader = () => {
     function Applications() {
         navigate("/JobApplications");
     }
-
+    function postOffer(){
+        navigate("/OfferForm");
+    }
 
 
     return (
@@ -105,15 +107,18 @@ const CandidateMainHeader = () => {
             {isMenuOpen && (
 
                 <div className="lg:hidden mt-4 space-y-2 flex flex-col">
-                    <button onClick={Applications} className="w-full text-left p-2 hover:bg-gray-200 rounded">Applications</button>
-                    <Link to="/CompaniesList" className="w-full text-left p-2 hover:bg-gray-200 rounded" onClick={() => setIsMenuOpen(false)}>Companies</Link>
-                    <Link to="/OffersPage" className="w-full text-left p-2 hover:bg-gray-200 rounded"  onClick={() => setIsMenuOpen(false)}>Offers</Link>
+                    <button onClick={postOffer} className="w-full text-white text-left p-2 hover:bg-gray-400 rounded">Post Offer</button>
+                    <hr/>
+                    <button onClick={Applications} className="w-full text-white text-left p-2 hover:bg-gray-400 rounded">Applications</button>
+                    <Link to="/CandidatesList" className="w-full text-left p-2 text-white hover:bg-gray-400 rounded" onClick={() => setIsMenuOpen(false)}>Candidates</Link>
+                    <hr/>
 
+                    <Link to="/RecruiterOffersPage" className="w-full text-left p-2  text-white hover:bg-gray-400 rounded"  onClick={() => setIsMenuOpen(false)}>My Offers</Link>
                     <div className="flex flex-col gap-2 mt-2">
-                        <button onClick={goProfile} className="w-full text-left p-2 hover:bg-gray-200 rounded">Your Profile</button>
-                        <button onClick={logout} className="w-full text-left p-2 hover:bg-gray-200 rounded">Sign Out</button>
-
-                        <button className="w-full text-left p-2 hover:bg-gray-200 rounded">About Us</button>
+                        <button onClick={goProfile} className="w-full text-left p-2  text-white hover:bg-gray-400 rounded">Your Profile</button>
+                        <button onClick={logout} className="w-full text-left p-2  text-white hover:bg-gray-400 rounded">Sign Out</button>
+                        <hr/>
+                        <button className="w-full text-left p-2 text-white hover:bg-gray-400 rounded">About Us</button>
                     </div>
                 </div>
             )}

@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import OfferService from "../services/OfferService";
+import OfferService from "../../services/OfferService";
 import OfferList from "./OfferList";
 import Message from "../utils/Message";
 

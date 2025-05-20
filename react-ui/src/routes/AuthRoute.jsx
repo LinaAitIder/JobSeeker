@@ -1,6 +1,6 @@
 // src/routes/authRoute.js
 import { Navigate, Outlet } from 'react-router-dom';
-import authService from '../Components/services/AuthService';
+import authService from '../services/AuthService';
 
 const AuthRoute = () => {
     const user = authService.getCurrentUser();

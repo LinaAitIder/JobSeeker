@@ -1,8 +1,8 @@
 import React from "react";
 import api from "../../api/axiosConfig";
 import DataMapper from "../utils/DataMapper";
-import companyService from "../services/CompanyService";
-import CompanyService from "../services/CompanyService";
+import companyService from "../../services/CompanyService";
+import CompanyService from "../../services/CompanyService";
 
 export default class CompanyInfoManager extends React.Component{
     constructor(props) {

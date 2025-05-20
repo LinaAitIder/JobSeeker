@@ -1,6 +1,6 @@
 // src/routes/ProtectedRoutes.js
 import { Navigate, Outlet } from 'react-router-dom';
-import authService from '../Components/services/AuthService';
+import authService from '../services/AuthService';
 
 const ProtectedRoute = (allowedRole) => {
     const user = authService.getCurrentUser();

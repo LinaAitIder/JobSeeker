@@ -1,5 +1,5 @@
 import {useState} from "react";
-import RecruiterService from "../services/RecruiterService";
+import RecruiterService from "../../services/RecruiterService";
 import DataMapper from "../utils/DataMapper";
 import Message from '../utils/Message'
 import RecruiterMainHeader from "../utils/headers/RecruiterMainHeader";
@@ -30,11 +30,11 @@ export default function OfferForm(){
 
     async function handleSubmit(){
         let formmatedFormData = DataMapper.mapOfferToFrench(formData)
+        console.log("recruiterId", recruiterId);
         try{
             const response = await RecruiterService.addOfferRequest(formmatedFormData, recruiterId);
             if (response.status===200){
                 setMessage("Offer successfully Posted!")
-                console.log("done successfully")
             }
         }catch(err){
             window.alert("A problem Occured, please retry Again!")
