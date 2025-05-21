@@ -20,6 +20,7 @@ export const RecruiterSignUp = () => {
   const handleRegister = async(e)=>{
     e.preventDefault();
     const recruiterData = DataMapper.mapRecruiterToFrench({firstName, lastName, company, email, position, phone ,password});
+    console.log(recruiterData)
     try{
       const response = await AuthService.registerRecruiter(recruiterData);
       setMessage(response.data);

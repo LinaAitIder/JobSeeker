@@ -9,7 +9,7 @@ export default class DataMapper {
             position: recruiter.position,
             telephone: recruiter.phone,
             photoProfilPath: recruiter.profilePicture,
-
+            motDePasse: recruiter.password
         };
     }
 
