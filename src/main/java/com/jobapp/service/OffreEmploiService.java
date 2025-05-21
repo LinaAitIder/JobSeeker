@@ -12,4 +12,7 @@ public interface OffreEmploiService {
     ResponseEntity<Void> deleteOffre(Long id);
     void deleteOffreWithCandidatures(Long offreId);
     List<OffreResponse> getOffresByEntreprise(Long entrepriseId);
+    List<OffreResponse> getRecommendedOffers(Long candidateId);
+    boolean hasCV(Long candidateId);
+
 }
