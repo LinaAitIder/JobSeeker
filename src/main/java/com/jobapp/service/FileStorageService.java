@@ -3,11 +3,14 @@ package com.jobapp.service;
 import com.jobapp.config.FileStorageProperties;
 import com.jobapp.dto.exception.FileStorageException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -151,5 +154,20 @@ public class FileStorageService {
 
     public Path getFilePath(String relativePath) {
         return this.fileStorageLocation.resolve(relativePath.substring(1)).normalize();
+    }
+
+    public Resource loadFileAsResource(String relativePath) {
+        try {
+            Path filePath = getFilePath(relativePath);
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Fichier non trouvé ou illisible: " + relativePath);
+            }
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException("URL du fichier invalide: " + relativePath, ex);
+        }
     }
 }

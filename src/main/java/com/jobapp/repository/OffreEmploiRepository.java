@@ -30,4 +30,8 @@ public interface OffreEmploiRepository extends JpaRepository<OffreEmploi, Long> 
 
     // Trouver les offres par localisation
     List<OffreEmploi> findByVilleAndPays(String ville, String pays);
+
+    // get active offers
+    @Query("SELECT o FROM OffreEmploi o WHERE o.dateExpiration >= CURRENT_DATE")
+    List<OffreEmploi> findActiveOffers();
 }
