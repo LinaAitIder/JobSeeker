@@ -1,5 +1,6 @@
 package com.jobapp.service.impl;
 
+
 import com.jobapp.dto.response.OffreResponse;
 import com.jobapp.dto.exception.NotFoundException;
 import com.jobapp.model.Candidature;
@@ -7,38 +8,51 @@ import com.jobapp.model.OffreEmploi;
 import com.jobapp.repository.CandidatureRepository;
 import com.jobapp.repository.OffreEmploiRepository;
 import com.jobapp.repository.RecruteurRepository;
+import com.jobapp.service.CvService;
 import com.jobapp.service.FileStorageService;
+import com.jobapp.service.IARecommendationService;
 import com.jobapp.service.OffreEmploiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class OffreEmploiServiceImpl implements OffreEmploiService {
     private static final Logger logger = LoggerFactory.getLogger(OffreEmploiServiceImpl.class);
+
     private final OffreEmploiRepository offreRepository;
     private final CandidatureRepository candidatureRepository;
     private final FileStorageService fileStorageService;
     private final RecruteurRepository recruteurRepository;
+    private final CvService cvService;
+    private final IARecommendationService iaRecommendationService;
+
 
     public OffreEmploiServiceImpl(OffreEmploiRepository offreRepository,
                                   CandidatureRepository candidatureRepository,
                                   FileStorageService fileStorageService,
-                                  RecruteurRepository recruteurRepository) {
+                                  RecruteurRepository recruteurRepository,
+                                  CvService cvService,
+                                  IARecommendationService iaRecommendationService) {
+
 
         this.offreRepository = offreRepository;
         this.candidatureRepository = candidatureRepository;
         this.fileStorageService = fileStorageService;
         this.recruteurRepository = recruteurRepository;
-    }
+        this.cvService = cvService;
+        this.iaRecommendationService = iaRecommendationService;
+
+        }
 
 
     @Override
@@ -107,6 +121,40 @@ public class OffreEmploiServiceImpl implements OffreEmploiService {
     }
 
 
+        @Override
+        public List<OffreResponse> getRecommendedOffers(Long candidateId) {
+            // 1. Récupérer les offres actives
+            List<OffreEmploi> activeOffers = offreRepository.findActiveOffers();
+
+            // 2. Convertir les offres en texte pour l'IA
+            List<String> offersAsText = activeOffers.stream()
+                    .map(this::convertToTextForAI)
+                    .toList();
+
+            //récipérer le texte du cv
+            String cvText =cvService.extractCvText(candidateId);
+
+
+            // 3. Appeler le service IA
+            List<Long> recommendedIds = iaRecommendationService.getRankedOffers(cvText, offersAsText, activeOffers);
+
+            System.out.println("\nRésultat final " + recommendedIds);
+
+            // 4. Récupérer et retourner les offres recommandées
+            return recommendedIds.stream()
+                    .map(id -> offreRepository.findById(id)
+                            .map(this::mapToOffreResponse)
+                            .orElse(null))
+                    .filter(Objects::nonNull)
+                    .toList();
+        }
+
+        @Override
+        public boolean hasCV(Long candidateId) {
+            return cvService.hasCv(candidateId);
+        }
+
+
     private OffreResponse mapToOffreResponse(OffreEmploi offre) {
         return new OffreResponse(
                 offre.getId(),
@@ -123,4 +171,17 @@ public class OffreEmploiServiceImpl implements OffreEmploiService {
                 offre.getTypeContrat()
         );
     }
+
+    private String convertToTextForAI(OffreEmploi offre) {
+        return String.format(
+                "%s %s %s %s",
+                offre.getTitre(),
+                offre.getDescription(),
+                offre.getDomaine(),
+                offre.getVille() + offre.getPays()
+        );
+    }
+
+
+
 }
