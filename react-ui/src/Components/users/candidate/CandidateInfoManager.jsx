@@ -20,6 +20,9 @@ export default class CandidateInfoManager extends React.Component{
         };
         this.updateInfoData = this.updateInfoData.bind(this);
         this.handleImageChange = this.handleImageChange.bind(this);
+        this.fetchCandidatPProfile = this.fetchCandidatPProfile.bind(this);
+        this.fetchCandidateData = this.fetchCandidateData.bind(this);
+        this.fetchCountries = this.fetchCountries.bind(this);
 
     }
 
@@ -28,28 +31,15 @@ export default class CandidateInfoManager extends React.Component{
         console.log("CandidatInfoForm ...")
         console.log(this.state.candidateId);
         //Loading Candidat Information
-        api.get(`/candidat/${this.state.candidateId}`)
-            .then((response) => {
-                console.log(response.data);
-                const apiData = response.data;
-                console.log("This is the parted Data :", apiData);
-
-                const apiDataT = DataMapper.mapCandidateToEnglish(apiData);
-                console.log("fetchedFormattedData :",apiDataT);
-
-                this.setState({
-                    currStateCandidate: {
-                        ...apiDataT
-                    },
-                })
-                console.log("this is the current:",this.state.currStateCandidate);
-            })
-            .catch((error) => {
-                console.error('Error fetching candidate profile:', error);
-            });
-
+        this.fetchCandidateData();
         //Loading Countries
-        api.get('https://restcountries.com/v3.1/all')
+        this.fetchCountries();
+        //Loading ProfilePicture
+        this.fetchCandidatPProfile();
+    }
+
+    async fetchCountries(){
+        await api.get('https://restcountries.com/v3.1/all')
             .then((response) => {
                 this.setState({ countries: response.data });
             })
@@ -57,8 +47,30 @@ export default class CandidateInfoManager extends React.Component{
                 console.error('Error fetching countries:', error);
             });
 
-        //Loading ProfilePicture
-        CandidateService.getPProfileRequest(this.state.candidateId).then((response)=>{
+    }
+    async fetchCandidateData(){
+      await api.get(`/candidat/${this.state.candidateId}`)
+          .then((response) => {
+              console.log(response.data);
+              const apiData = response.data;
+              console.log("This is the parted Data :", apiData);
+
+              const apiDataT = DataMapper.mapCandidateToEnglish(apiData);
+              console.log("fetchedFormattedData :",apiDataT);
+
+              this.setState({
+                  currStateCandidate: {
+                      ...apiDataT
+                  },
+              })
+              console.log("this is the current:",this.state.currStateCandidate);
+          })
+          .catch((error) => {
+              console.error('Error fetching candidate profile:', error);
+          });
+    }
+    async fetchCandidatPProfile() {
+       await CandidateService.getPProfileRequest(this.state.candidateId).then((response)=>{
             const fetchedImageUrl=URL.createObjectURL(response.data);
             console.log("fetched Image :",fetchedImageUrl);
             if(response.status === 200){
@@ -67,9 +79,9 @@ export default class CandidateInfoManager extends React.Component{
                 });
             }
 
-        })
-
-
+        }).catch((err)=>{
+            console.log(err);
+       })
     }
 
     async updateInfoData() {

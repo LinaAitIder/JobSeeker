@@ -12,7 +12,7 @@ import CandidateService from "../../../services/CandidateService";
               candidateId : props.candidateId,
               selectedCVFile:null,
               cvUpStatus:false,
-              successfulMsg:'',
+              successfulMsg:null,
               cvUrl:'',
               cvIsUpdated : false,
 
@@ -21,28 +21,30 @@ import CandidateService from "../../../services/CandidateService";
           this.handleFileSelect=this.handleFileSelect.bind(this);
           this.updateCV = this.updateCV.bind(this);
           this.getCvFullPath = this.getCvFullPath.bind(this);
+          this.fetchCandidateData = this.fetchCandidateData.bind(this);
 
 
       }
       componentDidMount() {
           if (!this.state.candidateId) return;
+          this.fetchCandidateData();
+     }
 
-          api.get(`candidat/${this.state.candidateId}/cv`, {
-             responseType:'blob'
-         }).then((response)=>{
-             if(response.status === 200  ){
-                 const pdfBlob = new Blob([response.data], {type:'application/pdf'});
-                 const pdfUrl = URL.createObjectURL(pdfBlob);
-                 console.log(pdfUrl);
-                 this.setState({
-                     cvUrl : pdfUrl,
-                 });
-             }
-         }).catch(error=>{
-
-             console.error(error);
-         });
-
+      async fetchCandidateData(){
+          await api.get(`candidat/${this.state.candidateId}/cv`, {
+              responseType:'blob'
+          }).then((response)=>{
+              if(response.status === 200  ){
+                  const pdfBlob = new Blob([response.data], {type:'application/pdf'});
+                  const pdfUrl = URL.createObjectURL(pdfBlob);
+                  console.log(pdfUrl);
+                  this.setState({
+                      cvUrl : pdfUrl,
+                  });
+              }
+          }).catch(error=>{
+              console.error(error);
+          });
      }
       handleFileSelect(file){
         this.setState(
@@ -58,27 +60,27 @@ import CandidateService from "../../../services/CandidateService";
         console.log(InitialCvFile.Type);
         try {
             const response = await CandidateService.uploadCvRequest(InitialCvFile,this.state.candidateId);
-            if(response.status === 200 || 204 ){
+            if(response.status === 200 ){
                 this.setState ({
-
                     cvUpStatus : true,
-                    cvIsUpdated : true
+                    cvIsUpdated : true,
+                    successfulMsg : true
 
                 })
             } else {
                 this.setState ({
                     cvUpStatus : false,
-                    cvIsUpdated : true
+                    cvIsUpdated : true,
+                    successfulMsg : true
 
                 })
             }
         } catch(err){
             this.setState ({
-                cvIsUpdated : true
+                cvIsUpdated : true,
+                successfulMsg : null
             })
             console.error(err);
-            throw new Error(err);
-
         }
     }
       async updateCV(){
@@ -87,29 +89,32 @@ import CandidateService from "../../../services/CandidateService";
         UpdatedCvFile.append('file', selectedCVFile);
         try {
             const response = await CandidateService.updateCvRequest(UpdatedCvFile,this.state.candidateId);
-            if(response.status === 200 || 204 ){
+            if(response.status === 200 ){
                 this.setState ({
                     cvUpStatus : true,
-                    cvIsUpdated : true
+                    cvIsUpdated : true,
+                    successfulMsg : true
                 })
+                this.fetchCandidateData();
             } else {
                 this.setState ({
                     cvUpStatus : false,
-                    cvIsUpdated : true
+                    cvIsUpdated : true,
+                    successfulMsg : true
                 })
+
             }
         } catch(err){
             this.setState ({
                 cvIsUpdated : true
             })
             console.error(err);
-            throw new Error(err);
         }
     }
       async getCvFullPath(){
         try {
             const response = await CandidateService.getCvRequest(this.state.candidateId);
-            if(response.status === 200 || 204 ){
+            if(response.status === 200 ){
                 const pdfBlob = new Blob([response.data], {type:'application/pdf'});
                 const pdfUrl = URL.createObjectURL(pdfBlob);
                 this.setState((prevState)=>({
@@ -127,6 +132,7 @@ import CandidateService from "../../../services/CandidateService";
         }
         return this.state.cvUrl;
     }
+
       render(){
         return(
             <div className="mt-10">

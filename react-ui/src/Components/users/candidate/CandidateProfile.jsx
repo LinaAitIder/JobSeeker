@@ -8,18 +8,28 @@ import CertificateManager from "./CertificationManager";
 import CandidateInfoManager from "./CandidateInfoManager";
 import CVManager from "./CVManager";
 
-const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
 
 
 class CandidateProfile extends React.Component {
+
   constructor(props) {
-    super(props);
-    this.state = {
-      connected :true,
-      successfulMsg : false,
+    super(props)
+      const user = localStorage.getItem('user');
+      this.state = {
+          connected :true,
+          successfulMsg : false,
+          userId: user ? JSON.parse(user).userId : ''
     };
 
     this.handleConnectionChange=this.handleConnectionChange.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+        const user = localStorage.getItem('user');
+        const newUserId = user ? JSON.parse(user).userId : '';
+        if (newUserId !== prevState.userId) {
+            this.setState({ userId: newUserId });
+        }
   }
 
   handleConnectionChange(connectedStatus){
@@ -32,9 +42,10 @@ class CandidateProfile extends React.Component {
     if(!this.state.connected){
        return <Navigate to="/login"/>;
     }
+    const { userId } = this.state;
 
 
-    return (
+      return (
       <>
         <CandidateMainHeader />
         <div className="min-h-screen bg-gray-100 p-6">
@@ -50,17 +61,17 @@ class CandidateProfile extends React.Component {
               <TabPanel>
                 <div className="space-y-6" id="section1">
 
-                 <CandidateInfoManager candidateId={USER_ID}/>
+                 <CandidateInfoManager candidateId={userId}/>
 
                   <hr/>
-                  <CVManager candidateId={USER_ID} />
+                  <CVManager candidateId={userId} />
                   <hr/>
-                  <CertificateManager candidateId={USER_ID} />
+                  <CertificateManager candidateId={userId} />
                 </div>
               </TabPanel>
 
               <TabPanel>
-                  <ApplicationList candidateId={USER_ID}/>
+                  <ApplicationList candidateId={userId}/>
               </TabPanel>
 
               <TabPanel>
