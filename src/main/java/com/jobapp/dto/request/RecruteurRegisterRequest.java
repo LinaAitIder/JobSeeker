@@ -12,7 +12,7 @@ public class RecruteurRegisterRequest {
     private String prenom;
 
     @NotBlank(message = "L'entreprise est obligatoire")
-    private String entreprise;
+    private String entrepriseNom;
 
     @Email(message = "Email invalide")
     @NotBlank(message = "L'email est obligatoire")
@@ -53,13 +53,10 @@ public class RecruteurRegisterRequest {
         this.prenom = prenom;
     }
 
-    public String getEntreprise() {
-        return entreprise;
-    }
+    public String getEntrepriseNom() { return entrepriseNom; }
 
-    public void setEntreprise(String entreprise) {
-        this.entreprise = entreprise;
-    }
+    public void setEntrepriseNom(String entrepriseNom) {
+        this.entrepriseNom = entrepriseNom; }
 
     public String getPosition() {
         return position;

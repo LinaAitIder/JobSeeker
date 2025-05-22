@@ -1,12 +1,15 @@
 package com.jobapp.service.impl;
 
 import com.jobapp.dto.exception.NotFoundException;
+import com.jobapp.dto.exception.ServiceException;
 import com.jobapp.dto.request.EntrepriseRequest;
 import com.jobapp.dto.response.EntrepriseResponse;
 import com.jobapp.model.Entreprise;
 import com.jobapp.repository.EntrepriseDAO;
 import com.jobapp.service.EntrepriseService;
 import com.jobapp.service.FileStorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +24,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class EntrepriseServiceImpl implements EntrepriseService {
 
-
+    private static final Logger logger = LoggerFactory.getLogger(EntrepriseServiceImpl.class);
     private final EntrepriseDAO entrepriseDAO;
     private final FileStorageService fileStorageService;
 
@@ -84,15 +87,40 @@ public class EntrepriseServiceImpl implements EntrepriseService {
 
     @Override
     public Entreprise findOrCreate(String nomEntreprise) {
-        return entrepriseDAO.findByNom(nomEntreprise)
-                .orElseGet(() -> {
-                    Entreprise nouvelleEntreprise = new Entreprise();
-                    nouvelleEntreprise.setNom(nomEntreprise);
-                    // Valeurs par défaut
-                    nouvelleEntreprise.setTaille(Entreprise.TailleEntreprise.MOYENNE);
-                    nouvelleEntreprise.setDomaine("Not specified");
-                    return entrepriseDAO.save(nouvelleEntreprise);
-                });
+        try {
+            // Gestion du cas null
+            if (nomEntreprise == null || nomEntreprise.trim().isEmpty()) {
+                nomEntreprise = "Entreprise non spécifiée";
+            }
+
+            String nomNormalise = nomEntreprise.trim();
+
+            // Chercher d'abord avec une correspondance exacte
+            Optional<Entreprise> existanteExacte = entrepriseDAO.findByNom(nomNormalise);
+            if (existanteExacte.isPresent()) {
+                return existanteExacte.get();
+            }
+
+            // Si pas trouvé, chercher avec LIKE
+            Optional<Entreprise> existanteApproximative = entrepriseDAO.findByNomContaining(nomNormalise);
+            if (existanteApproximative.isPresent()) {
+                return existanteApproximative.get();
+            }
+
+            // Si aucune entreprise trouvée, creer une nouvelle
+            Entreprise nouvelleEntreprise = new Entreprise();
+            nouvelleEntreprise.setNom(nomNormalise);
+            nouvelleEntreprise.setTaille(Entreprise.TailleEntreprise.MOYENNE);
+            nouvelleEntreprise.setDomaine("Non spécifié");
+            nouvelleEntreprise.setLocation("Non spécifié");
+            nouvelleEntreprise.setDescription(nomNormalise);
+
+            return entrepriseDAO.save(nouvelleEntreprise);
+
+        } catch (Exception e) {
+            logger.error("Erreur lors de la recherche/création d'entreprise", e);
+            throw new ServiceException("Erreur lors du traitement de l'entreprise");
+        }
     }
 
     public Optional<Entreprise> findByNom(String nom) {
