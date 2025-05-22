@@ -209,7 +209,7 @@ public class AuthServiceImpl implements AuthService {
                 candidatRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateEmailException("L'email " + request.getEmail() + " est déjà utilisé");
         }
-        Entreprise entreprise = entrepriseService.findOrCreate(request.getEntreprise());
+        Entreprise entreprise = entrepriseService.findOrCreate(request.getEntrepriseNom());
 
         //S'assurer que le mot de passe est unique
         String encryptedPassword = passwordEncoder.encode(request.getMotDePasse());
