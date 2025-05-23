@@ -36,16 +36,19 @@ class OfferService{
     async getRecommendedOffers(candidateId) {
         try {
             const response = await api.get(`/offres/recommended/${candidateId}`);
-            return response.data;
+            return response.data || [];
         } catch (error) {
             if (error.response?.status === 401) {
                 throw new Error("Session expired. Please login again");
             }
+            if (error.response?.status === 404) {
+                return [];
+            }
             if (error.response?.status === 412) {
                 throw new Error("Please upload a CV first");
             }
-            console.error("Failed to load offers:", error);
-            throw new Error("Failed to load recommended offers");
+            console.error("Recommendation error:", error);
+            throw new Error(error.response?.data?.message || "Unable to load recommendations");
         }
     }
 
