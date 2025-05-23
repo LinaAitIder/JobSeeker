@@ -10,7 +10,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
+
 
 import java.time.Duration;
 import java.util.*;
@@ -34,6 +34,17 @@ public class IARecommendationServiceImpl implements IARecommendationService {
 
     @Override
     public List<Long> getRankedOffers(String cvText, List<String> offersAsText,List<OffreEmploi> activeOffers){
+
+        // Filter out empty offers before processing
+        offersAsText = offersAsText.stream()
+                .filter(offer -> offer != null && !offer.trim().isEmpty())
+                .toList();
+
+        if(offersAsText.isEmpty()) {
+            log.warn("No valid job offers found for recommendations");
+            return Collections.emptyList();
+        }
+
         Map<String, Object> requestBody = Map.of(
                 "inputs", Map.of(
                         "source_sentence", cvText,

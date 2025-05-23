@@ -20,8 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -126,10 +128,19 @@ public class OffreEmploiServiceImpl implements OffreEmploiService {
             // 1. Récupérer les offres actives
             List<OffreEmploi> activeOffers = offreRepository.findActiveOffers();
 
+            if (activeOffers.isEmpty()) {
+                return Collections.emptyList();
+            }
+
             // 2. Convertir les offres en texte pour l'IA
             List<String> offersAsText = activeOffers.stream()
                     .map(this::convertToTextForAI)
+                    .filter(text -> !text.isBlank())
                     .toList();
+
+            if (offersAsText.isEmpty()) {
+                return Collections.emptyList();
+            }
 
             //récipérer le texte du cv
             String cvText =cvService.extractCvText(candidateId);
@@ -142,10 +153,10 @@ public class OffreEmploiServiceImpl implements OffreEmploiService {
 
             // 4. Récupérer et retourner les offres recommandées
             return recommendedIds.stream()
-                    .map(id -> offreRepository.findById(id)
-                            .map(this::mapToOffreResponse)
-                            .orElse(null))
-                    .filter(Objects::nonNull)
+                    .map(id -> offreRepository.findById(id))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .map(this::mapToOffreResponse)
                     .toList();
         }
 
