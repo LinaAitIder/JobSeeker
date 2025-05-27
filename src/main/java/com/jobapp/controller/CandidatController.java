@@ -341,4 +341,10 @@ public class CandidatController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('RECRUTEUR')")
+    public ResponseEntity<List<CandidatProfileResponse>> getAllCandidats() {
+        return ResponseEntity.ok(candidatService.getAllCandidats());
+    }
 }

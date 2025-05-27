@@ -10,6 +10,7 @@ import com.jobapp.model.OffreEmploi;
 import com.jobapp.repository.CandidatRepository;
 import com.jobapp.repository.CandidatureRepository;
 import com.jobapp.repository.OffreEmploiRepository;
+import com.jobapp.repository.RecruteurRepository;
 import com.jobapp.service.CandidatureService;
 import com.jobapp.service.FileStorageService;
 import org.apache.coyote.BadRequestException;
@@ -23,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,15 +33,18 @@ import java.util.stream.Collectors;
 public class CandidatureServiceImpl implements CandidatureService {
     private static final Logger logger = LoggerFactory.getLogger(CandidatureServiceImpl.class);
     private final CandidatureRepository candidatureRepository;
+    private final RecruteurRepository recruteurRepository;
     private final CandidatRepository candidatRepository;
     private final OffreEmploiRepository offreRepository;
     private final FileStorageService fileStorageService;
 
     public CandidatureServiceImpl(CandidatureRepository candidatureRepository,
                                   CandidatRepository candidatRepository,
+                                  RecruteurRepository recruteurRepository,
                                   OffreEmploiRepository offreRepository,
                                   FileStorageService fileStorageService) {
         this.candidatureRepository = candidatureRepository;
+        this.recruteurRepository = recruteurRepository;
         this.candidatRepository = candidatRepository;
         this.offreRepository = offreRepository;
         this.fileStorageService = fileStorageService;
@@ -179,4 +184,40 @@ public class CandidatureServiceImpl implements CandidatureService {
         // Suppression en masse plus efficace que deleteAll()
         candidatureRepository.deleteByCandidatId(candidatId);
     }
+
+    @Override
+    public ResponseEntity<List<CandidatureResponse>> getAllCandidaturesForRecruteur(Long recruteurId, String statut) {
+        try {
+            // 1. Vérifier que le recruteur existe
+            if (!recruteurRepository.existsById(recruteurId)) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // 2. Recupérer toutes les offres du recruteur
+            List<OffreEmploi> offres = offreRepository.findByRecruteurId(recruteurId);
+            List<Long> offreIds = offres.stream().map(OffreEmploi::getId).collect(Collectors.toList());
+
+            // 3. Récupérer les candidatures selon le statut
+            List<Candidature> candidatures;
+            if (statut != null && !statut.isEmpty()) {
+                Candidature.Statut statutEnum = Candidature.Statut.valueOf(statut.toUpperCase());
+                candidatures = candidatureRepository.findByOffreIdInAndStatutOrderByDatePostulationDesc(offreIds, statutEnum);
+            } else {
+                candidatures = candidatureRepository.findByOffreIdInOrderByDatePostulationDesc(offreIds);
+            }
+
+            // 4. Mapper vers les DTO de response
+            List<CandidatureResponse> responses = candidatures.stream()
+                    .map(this::mapToCandidatureResponse)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(responses);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 }

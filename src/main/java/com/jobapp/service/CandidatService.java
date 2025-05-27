@@ -32,4 +32,6 @@ public interface CandidatService {
 
     List<Certification> getCertifications(Long candidatId);
 
+    List<CandidatProfileResponse> getAllCandidats();
+
 }
