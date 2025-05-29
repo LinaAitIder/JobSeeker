@@ -16,6 +16,10 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Long> 
     // Trouver les candidatures par offre
     List<Candidature> findByOffreId(Long offreId);
 
+    List<Candidature> findByOffreIdInOrderByDatePostulationDesc(List<Long> offreIds);
+
+    List<Candidature> findByOffreIdInAndStatutOrderByDatePostulationDesc(List<Long> offreIds, Candidature.Statut statut);
+
     @Modifying
     @Query("DELETE FROM Candidature c WHERE c.offre.id = :offreId")
     void deleteByOffreId(@Param("offreId") Long offreId);

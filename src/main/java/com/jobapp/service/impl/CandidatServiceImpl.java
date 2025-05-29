@@ -354,4 +354,12 @@ public class CandidatServiceImpl implements CandidatService {
         return certificationService.getCertificationsByCandidatId(candidatId);
     }
 
+    @Override
+    public List<CandidatProfileResponse> getAllCandidats() {
+        List<Candidat> candidats = candidatRepository.findAll();
+        return candidats.stream()
+                .map(this::mapToCandidatProfileResponse)
+                .collect(Collectors.toList());
+    }
+
 }

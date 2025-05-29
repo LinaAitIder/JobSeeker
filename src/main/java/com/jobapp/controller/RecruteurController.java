@@ -5,6 +5,7 @@ import com.jobapp.dto.request.CreateOffreRequest;
 import com.jobapp.dto.request.UpdateRecruteurProfileRequest;
 import com.jobapp.dto.request.UpdatePasswordRequest;
 import com.jobapp.dto.response.*;
+import com.jobapp.service.CandidatureService;
 import com.jobapp.service.FileStorageService;
 import com.jobapp.service.RecruteurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,17 @@ import java.util.List;
 public class RecruteurController {
 
     private final RecruteurService recruteurService;
+    private final CandidatureService candidatureService;
     private final FileStorageService fileStorageService;
     private final FileStorageProperties fileStorageProperties;
 
     @Autowired
-    public RecruteurController(RecruteurService recruteurService, FileStorageService fileStorageService,
+    public RecruteurController(RecruteurService recruteurService,
+                               FileStorageService fileStorageService,
+                               CandidatureService candidatureService,
                                FileStorageProperties fileStorageProperties) {
         this.recruteurService = recruteurService;
+        this.candidatureService = candidatureService;
         this.fileStorageService = fileStorageService;
         this.fileStorageProperties = fileStorageProperties;
     }
@@ -144,5 +149,13 @@ public class RecruteurController {
     public ResponseEntity<Void> deleteRecruteur(@PathVariable Long id) {
 
         return recruteurService.deleteRecruteur(id);
+    }
+
+    @GetMapping("/{id}/candidatures")
+    @PreAuthorize("#id == authentication.principal.id && hasRole('RECRUTEUR')")
+    public ResponseEntity<List<CandidatureResponse>> getAllCandidaturesForRecruteur(
+            @PathVariable Long recruteurId,
+            @RequestParam(required = false) String statut) {
+        return candidatureService.getAllCandidaturesForRecruteur(recruteurId, statut);
     }
 }

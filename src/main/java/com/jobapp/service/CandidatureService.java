@@ -14,4 +14,5 @@ public interface CandidatureService {
     ResponseEntity<Void> deleteCandidature(Long id);
     void deleteAllByCandidatId(Long candidatId);
     Candidature getById(Long id);
+    ResponseEntity<List<CandidatureResponse>> getAllCandidaturesForRecruteur(Long recruteurId, String statut);
 }

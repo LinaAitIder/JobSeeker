@@ -18,8 +18,6 @@ public class Candidat implements Serializable{
     private String telephone;
     private String email;
 
-    //Unconsistent naming in the backe
-
     @Column(name = "mot_de_passe")
     private String motDePasse;
 
