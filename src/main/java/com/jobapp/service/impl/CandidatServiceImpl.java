@@ -2,9 +2,12 @@ package com.jobapp.service.impl;
 
 import com.jobapp.dto.request.CertificationRequest;
 import com.jobapp.dto.request.UpdateCandidatProfileRequest;
-import com.jobapp.dto.response.*;
+import com.jobapp.dto.response.CandidatProfileResponse;
+import com.jobapp.dto.response.CandidatureResponse;
 import com.jobapp.dto.exception.NotFoundException;
 import com.jobapp.dto.exception.ServiceException;
+import com.jobapp.dto.response.ErrorResponse;
+import com.jobapp.dto.response.MessageResponse;
 import com.jobapp.model.Candidat;
 import com.jobapp.model.Candidature;
 import com.jobapp.model.Certification;
@@ -18,7 +21,6 @@ import com.jobapp.service.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -354,58 +355,11 @@ public class CandidatServiceImpl implements CandidatService {
     }
 
     @Override
-    public List<CandidatCompleteResponse> getAllCandidatsWithFiles() {
+    public List<CandidatProfileResponse> getAllCandidats() {
         List<Candidat> candidats = candidatRepository.findAll();
         return candidats.stream()
-                .map(this::mapToCandidatCompleteResponse)
+                .map(this::mapToCandidatProfileResponse)
                 .collect(Collectors.toList());
-    }
-
-    private CandidatCompleteResponse mapToCandidatCompleteResponse(Candidat candidat) {
-        try {
-            Resource photoProfil = null;
-            if (candidat.getPhotoProfilPath() != null) {
-                photoProfil = fileStorageService.loadFileAsResource(candidat.getPhotoProfilPath());
-            }
-
-            Resource cv = null;
-            if (candidat.getCvPath() != null) {
-                cv = fileStorageService.loadFileAsResource(candidat.getCvPath());
-            }
-
-            List<CertificationFileResponse> certifications = candidat.getCertifications().stream()
-                    .map(cert -> {
-                        try {
-                            Resource file = fileStorageService.loadFileAsResource(cert.getPath());
-                            return new CertificationFileResponse(
-                                    cert.getId(),
-                                    cert.getNom(),
-                                    file
-                            );
-                        } catch (Exception e) {
-                            logger.error("Error loading certification file: " + cert.getPath(), e);
-                            return null;
-                        }
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-
-            return new CandidatCompleteResponse(
-                    candidat.getId(),
-                    candidat.getNom(),
-                    candidat.getPrenom(),
-                    candidat.getEmail(),
-                    candidat.getVille(),
-                    candidat.getPays(),
-                    candidat.getTelephone(),
-                    photoProfil,
-                    cv,
-                    certifications
-            );
-        } catch (Exception e) {
-            logger.error("Error mapping candidat to complete response: " + candidat.getId(), e);
-            return null;
-        }
     }
 
 }
