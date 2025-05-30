@@ -1,6 +1,7 @@
 package com.jobapp.service;
 
 import com.jobapp.dto.request.UpdateCandidatProfileRequest;
+import com.jobapp.dto.response.CandidatCompleteResponse;
 import com.jobapp.dto.response.CandidatProfileResponse;
 import com.jobapp.dto.response.CandidatureResponse;
 import com.jobapp.model.Certification;
@@ -32,6 +33,6 @@ public interface CandidatService {
 
     List<Certification> getCertifications(Long candidatId);
 
-    List<CandidatProfileResponse> getAllCandidats();
+    List<CandidatCompleteResponse> getAllCandidatsWithFiles();
 
 }

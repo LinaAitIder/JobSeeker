@@ -153,7 +153,7 @@ public class RecruteurController {
 
     @GetMapping("/{id}/candidatures")
     @PreAuthorize("#id == authentication.principal.id && hasRole('RECRUTEUR')")
-    public ResponseEntity<List<CandidatureResponse>> getAllCandidaturesForRecruteur(
+    public ResponseEntity<List<CandidatureCompleteResponse>> getAllCandidaturesForRecruteur(
             @PathVariable Long recruteurId,
             @RequestParam(required = false) String statut) {
         return candidatureService.getAllCandidaturesForRecruteur(recruteurId, statut);
