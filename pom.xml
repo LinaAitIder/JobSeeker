@@ -156,7 +156,23 @@
       <artifactId>jsr305</artifactId>
       <version>3.0.2</version>
     </dependency>
-    <!--Managing env Variables-->
+
+    <!--  Apache Tika pour extraire texte CV  -->
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+      <version>2.9.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parsers-standard-package</artifactId>
+      <version>2.9.0</version>
+    </dependency>
+    <!--  WebClient pour appel HTTP  -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
 
   </dependencies>
   <build>

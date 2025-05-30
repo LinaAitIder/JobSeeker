@@ -5,7 +5,6 @@ import com.jobapp.dto.exception.FileStorageException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -156,7 +155,7 @@ public class FileStorageService {
     public Path getFilePath(String relativePath) {
         return this.fileStorageLocation.resolve(relativePath.substring(1)).normalize();
     }
-
+  
     public Resource loadFileAsResource(String filePath) throws FileStorageException {
         try {
             String normalizedPath = filePath.startsWith("/") ? filePath.substring(1) : filePath;
