@@ -96,6 +96,10 @@ export default class RecruiterInfoManager extends React.Component{
                     isUpdated : true
                 });
                 console.log("this is the image path :",ppPath);
+                setTimeout(()=>{
+                    window.location.reload();
+
+                }, 1000)
 
             }
         } catch (error) {
@@ -212,11 +216,11 @@ export default class RecruiterInfoManager extends React.Component{
 
                     <div>
                         <label className="block text-gray-700 mb-2">Phone Number</label>
-                        <input type="text" className="block w-full border p-2 rounded-md" value={this.state.currStateRecruiter.phoneNumber || ''} onChange={(e)=>{
+                        <input type="text" className="block w-full border p-2 rounded-md" value={this.state.currStateRecruiter.phone|| ''} onChange={(e)=>{
                             this.setState(prevState=>({
                                 currStateRecruiter: {
                                     ...prevState.currStateRecruiter,
-                                    phoneNumber: e.target.value
+                                    phone: e.target.value
                                 }
                             }))}}/>
                     </div>

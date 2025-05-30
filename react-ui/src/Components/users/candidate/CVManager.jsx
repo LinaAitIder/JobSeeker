@@ -67,6 +67,7 @@ import CandidateService from "../../../services/CandidateService";
                     successfulMsg : true
 
                 })
+                this.fetchCandidateData();
             } else {
                 this.setState ({
                     cvUpStatus : false,

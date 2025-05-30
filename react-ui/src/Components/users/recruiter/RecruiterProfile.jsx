@@ -7,17 +7,28 @@ import CompanyInfoManager from "../../companies/CompanyInfoManager";
 import {Navigate} from "react-router-dom";
 import RecruiterOffersManager from "./RecruiterOffersManager";
 
-const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
 
 class RecruiterProfile extends React.Component {
     constructor(props) {
+        const user = localStorage.getItem('user');
         super(props);
         this.state = {
             connected :true,
             successfulMsg : false,
+            userId: user ? JSON.parse(user).userId : ''
+
         };
 
         this.handleConnectionChange=this.handleConnectionChange.bind(this);
+    }
+
+
+    componentDidUpdate(prevProps, prevState) {
+        const user = localStorage.getItem('user');
+        const newUserId = user ? JSON.parse(user).userId : '';
+        if (newUserId !== prevState.userId) {
+            this.setState({ userId: newUserId });
+        }
     }
 
     handleConnectionChange(connectedStatus){
@@ -31,6 +42,8 @@ class RecruiterProfile extends React.Component {
         if(!this.state.connected){
             return <Navigate to="/login"/>;
         }
+        const { userId } = this.state;
+
         return (
             <div>
                 <RecruiterMainHeader/>
@@ -45,15 +58,15 @@ class RecruiterProfile extends React.Component {
                         <div className="w-full md:w-3/4 p-8 bg-gray-50">
                             <TabPanel>
                                 <div className="space-y-6" id="section1">
-                                    <RecruiterInfoManager recruiterId={USER_ID}/>
+                                    <RecruiterInfoManager recruiterId={userId}/>
                                     <hr/>
                                 </div>
                             </TabPanel>
                             <TabPanel>
-                                <CompanyInfoManager recruiterId={USER_ID} />
+                                <CompanyInfoManager recruiterId={userId} />
                             </TabPanel>
                             <TabPanel>
-                                <RecruiterOffersManager recruiterId={USER_ID}/>
+                                <RecruiterOffersManager recruiterId={userId}/>
                             </TabPanel>
                             <TabPanel>
                                 <AccountManager connected={this.state.connected} onConnectionChange={this.handleConnectionChange}/>

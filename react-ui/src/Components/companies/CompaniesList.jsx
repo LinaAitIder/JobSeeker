@@ -12,6 +12,7 @@ export class CompaniesList extends React.Component {
             error: null
         };
         this.formatCompanyData = this.formatCompanyData.bind(this);
+        this.handleDetailsRedirection = this.handleDetailsRedirection.bind(this);
     }
 
     async componentDidMount() {
@@ -42,6 +43,10 @@ export class CompaniesList extends React.Component {
 
     }
 
+    handleDetailsRedirection(companyId){
+        window.location.href = `/CompanyDetails/${companyId}`;
+    }
+
     render() {
         const { companies, error } = this.state;
 
@@ -57,33 +62,28 @@ export class CompaniesList extends React.Component {
         }
 
         return (
-            <div className="h-full bg-black">
+            <div className="h-full bg-gray-50">
                 <CandidateMainHeader />
-                <div className="text-center mt-10 text-2xl font-semibold">All Organizations</div>
+                <div className="text-center mt-10  text-2xl font-semibold">All Organizations</div>
 
-                <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-6 mt-6  bg-black">
+                <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-6 mt-4 ">
                     {companies.length > 0 ? (
                         companies.map((company, index) => (
                             <div
                                 key={index}
                                 className="bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden hover:scale-105 transition-transform duration-200"
                             >
-                                <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
-                                    <img
-                                        src={company.logoPath || ""}
-                                        alt="Company Logo"
-                                        className="max-h-full max-w-full object-contain"
-                                        onError={(e) => e.target.src = "/placeholder-logo.png"}
-                                    />
-                                </div>
+
                                 <div className="p-4 space-y-2">
                                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                        {company.name}
+                                        {company.name || "Unknown Company"}
                                     </h3>
                                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                                        {company.description?.length > 100
-                                            ? company.description.slice(0, 100) + "..."
-                                            : company.description}
+                                        {company.description
+                                            ? (company.description.length > 100
+                                                ? company.description.slice(0, 100) + "..."
+                                                : company.description)
+                                            : <span className="text-gray-400 italic">No description</span>}
                                     </p>
                                     <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none"
@@ -101,13 +101,15 @@ export class CompaniesList extends React.Component {
                                         </svg>
                                         <span>{company.domain || "Unspecified domain"}</span>
                                     </div>
-                                    <div className="mt-3">
-                                        <a
-                                            href="#"
-                                            className="inline-block px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                                    <div className=" h-full mt-auto pt-3 flex flex-col  ">
+                                        <div className="flex-grow "></div>
+
+                                        <button
+                                            onClick={()=>this.handleDetailsRedirection(company.id)}
+                                            className="inline-block px-4 py-2  rounded bg-blue-500 text-white text-sm rounded hover:bg-blue-560"
                                         >
-                                            View Profile
-                                        </a>
+                                            View More Information
+                                        </button>
                                     </div>
                                 </div>
                             </div>

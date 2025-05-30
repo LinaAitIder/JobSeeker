@@ -151,9 +151,10 @@ public class RecruteurController {
         return recruteurService.deleteRecruteur(id);
     }
 
-    @GetMapping("/{id}/candidatures")
-    @PreAuthorize("#id == authentication.principal.id && hasRole('RECRUTEUR')")
-    public ResponseEntity<List<CandidatureCompleteResponse>> getAllCandidaturesForRecruteur(
+
+    @GetMapping("/{recruteurId}/candidatures")
+    @PreAuthorize("#recruteurId== authentication.principal.id && hasRole('RECRUTEUR')")
+    public ResponseEntity<List<CandidatureResponse>> getAllCandidaturesForRecruteur(
             @PathVariable Long recruteurId,
             @RequestParam(required = false) String statut) {
         return candidatureService.getAllCandidaturesForRecruteur(recruteurId, statut);

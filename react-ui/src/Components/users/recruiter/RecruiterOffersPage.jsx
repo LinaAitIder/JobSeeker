@@ -7,10 +7,10 @@ const RECRUITER_ID=localStorage.getItem('user')?JSON.parse(localStorage.getItem(
 export default function RecruiterOffersPage(){
     console.log("This is the recruiter id :",RECRUITER_ID);
     return(
-      <>
+      <div className="h-full bg-gray-10">
         <RecruiterMainHeader/>
 
           <RecruiterOffersManager recruiterId={RECRUITER_ID}/>
-      </>
+      </div>
     );
 }

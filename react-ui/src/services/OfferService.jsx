@@ -3,18 +3,15 @@ import api from "../api/axiosConfig";
 
 class OfferService{
 
+    getOfferById(offerId){
 
-    getOffers(){
-        try {
-            return api.get(`/offres`);
-        }catch(err){
-
-        }
+        return api.get(`/offres/${offerId}`)
     }
 
-    //Still Not used
-    getOffersByCompany(){
 
+
+    getOffers(){
+            return api.get(`/offres`);
     }
 
     async checkCV(candidateId) {
@@ -54,12 +51,9 @@ class OfferService{
 
     //searchOffers
     searchOffer(keyword){
-
-    }
-
-
-    //deleteOffers
-    deleteOffer(offerId){
+        return api.get(`/offres/search`, {
+            params: { q: keyword }
+        });
 
     }
 

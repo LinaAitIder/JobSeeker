@@ -62,11 +62,11 @@ function EmailVerification() {
     return (
         <>
             <HomeHeader/>
-            <form className="flex flex-col justify-center items-center bg-black h-screen pb-12">
-                <h1 className="text-2xl font-bold text-white mb-4">Forgot Password</h1>
-                <p className="text-white mb-4">Please enter your email address to reset your password.</p>
+            <form className="flex flex-col justify-center items-center bg-gradient-to-br from-indigo-100 via-white to-indigo-200  h-screen pb-12">
+                <h1 className="text-2xl font-bold text-black mb-4">Forgot Password</h1>
+                <p className="text-gray-600 italic mb-4">Please enter your email address to reset your password.</p>
                 <input type="email" 
-                 className="block rounded-md bg-white pl-3 sm:pr-20 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                 className="block w-80 rounded-md border border-gray-400 bg-white pl-3 pr-4 py-2 text-base text-gray-900 placeholder:text-gray-500 focus:border-indigo-500 focus:ring-2 focus:border-none focus:outline-none focus:ring-indigo-400 sm:text-sm shadow-md"
                  placeholder="Enter your Email" 
                  onChange={(e)=>setEmail(e.target.value)}/>
                 <button className="px-5 py-2 mt-5 text-white bg-blue-500 rounded" type="button" onClick={doEmailExist}>Submit</button>

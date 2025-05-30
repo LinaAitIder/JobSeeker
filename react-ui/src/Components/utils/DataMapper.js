@@ -62,13 +62,15 @@ export default class DataMapper {
     static mapCandidateInfoToEnglish(frenchData) {
         return {
             id: frenchData.id,
-            profilePicture: frenchData.photoProfil,
+            profilePicture: frenchData.photoProfilPath,
             firstName: frenchData.nom,
             lastName: frenchData.prenom,
             email: frenchData.email,
             phoneNumber: frenchData.telephone,
             city: frenchData.ville,
-            country: frenchData.pays
+            country: frenchData.pays,
+            cvPath: frenchData.cvPath,
+            certifications: frenchData.certificationsPaths
         }
     }
 

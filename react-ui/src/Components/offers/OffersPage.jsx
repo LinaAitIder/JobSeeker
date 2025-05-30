@@ -1,7 +1,8 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import OfferService from "../../services/OfferService";
 import OfferList from "./OfferList";
 import Message from "../utils/Message";
+import CandidateMainHeader from "../utils/headers/CandidateMainHeader";
 
 export default function OffersPage(){
     const [message, setMessage] = useState({
@@ -26,9 +27,13 @@ export default function OffersPage(){
     }; fetchOffers()}, []);
 
     return (
-        <div className="flex flex-col justify-center align-center text-black">
-            <OfferList offers={offers}/>
+        <div className="bg-white h-full">
+            <CandidateMainHeader/>
+            <div className="flex flex-col justify-center align-center text-black bg-gray-50">
+                <div className="text-2xl text-black m-6 flex justify-center align-center " style={{fontFamily:'poppins'}}>Explore Offers </div>
+                <OfferList offers={offers} isCompanyOffers={false} />
             <Message type={message.type} text={message.text} />
+        </div>
         </div>
     );
 

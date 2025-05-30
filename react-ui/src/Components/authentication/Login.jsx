@@ -52,7 +52,7 @@ export const Login = () => {
           console.log(localStorage.getItem('user'));
         }
         await getInitialUserData(response.data.id,response.data.role);
-        navigate('/candidateProfile');
+        navigate('/CandidateMainHome');
       } else if(response.status === 200 && response.data.role==='RECRUTEUR'){
         localStorage.setItem('user', JSON.stringify(response.data));
         if(localStorage.getItem('user')){
@@ -72,80 +72,69 @@ export const Login = () => {
   };
 
   return (
-    <>
-    <HomeHeader/>
-    <div className="flex min-h-screen flex-1 flex-col justify-start px-20 py-16 lg:px-3 bg-black  ">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-0 text-center text-2xl/9 font-bold tracking-tight text-white">
-           Sign in to your account
-        </h2>
-      </div>
-      <div className='flex justify-center items-center mt-5'
-      >
+      <>
+        <HomeHeader />
+        <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-indigo-200 flex items-center justify-center py-16 px-4 pt-0 sm:px-6 lg:px-8">
+          <div className="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md">
+            <h2 className="text-center text-2xl/9 font-bold text-gray-900 font-serif">
+              Sign In
+            </h2>
 
-      </div>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form onSubmit={handleSignIn} className="space-y-6" >
-          <div>
-            <label htmlFor="email" className="block text-sm/6 font-medium text-white">
-              Email address
-            </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                onChange={(e)=>{
-                  setEmail(e.target.value)
-                }}
-              />
-            </div>
-          </div>
+            <form onSubmit={handleSignIn} className="mt-8 space-y-6">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 p-1 ">
+                  Email address
+                </label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    autoComplete="email"
+                    className="block w-full rounded-md border border-gray-200 bg-white  mt-1 p-1 pr-4 py-2 text-base text-gray-900 placeholder:text-gray-500 focus:border-indigo-500 focus:ring-2 focus:border-none focus:outline-none focus:ring-indigo-400 sm:text-sm shadow-md"
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
 
-          <div>
-            <div className="flex items-center justify-between">
-              <label htmlFor="password" className="block text-sm/6 font-medium text-white">
-                Password
-              </label>
-              <div className="text-sm">
-                <a href="/passwordForgotten" className="font-semibold text-indigo-600 hover:text-indigo-500">
+              <div>
+                <label htmlFor="motDepasse" className="block text-sm font-medium text-gray-700 p-1">
+                  Password
+                </label>
+                <input
+                    id="motDepasse"
+                    name="motDepasse"
+                    type="password"
+                    required
+                    autoComplete="current-password"
+                    className="block w-full rounded-md border border-gray-200 bg-white  mt-1 pl-1 pr-4 py-2 text-base text-gray-900 placeholder:text-gray-500 focus:border-indigo-500 focus:ring-2 focus:border-none focus:outline-none focus:ring-indigo-400 sm:text-sm shadow-md"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <a
+                    href="/passwordForgotten"
+                    className="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
+                >
                   Forgot password?
                 </a>
               </div>
-            </div>
-            <div className="mt-2">
-              <input
-                id="motDepasse"
-                name="motDepasse"
-                type="password"
-                required
-                autoComplete="current-password"
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                 onChange={(e)=>{
-                  setPassword(e.target.value)
-                }}
-              />
-            </div>
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Sign in
-            </button>
+              <button
+                  type="submit"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Sign in
+              </button>
+
+              <div id="error-msg" className="text-red-500 text-sm mt-2 text-center">
+                {message}
+              </div>
+            </form>
           </div>
-        </form>
-        <div  id="error-msg">
-          {message}
         </div>
-      </div>
-    </div>
-  </>
+      </>
+
   )
 }
 export default Login;

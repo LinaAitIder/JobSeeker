@@ -14,7 +14,12 @@ export default function ApplyButton ({offerId}){
     }
     return(
         <>
-            <button className="w-full bg-blue-400 rounded-xl" onClick={redirectApplicationForm}>Apply</button>
+            <button
+                onClick={redirectApplicationForm}
+                className="px-5 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-500 transition-colors shadow"
+            >
+                Apply
+            </button>
         </>
     );
 }

@@ -10,7 +10,7 @@ import {PlusIcon} from "@heroicons/react/16/solid";
 
 const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
 
-const CandidateMainHeader = () => {
+const RecruiterMainHeader = () => {
     const [profilePicture, setProfilePicture] = useState('https://www.pngmart.com/files/23/Profile-PNG-Photo.png');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
@@ -44,14 +44,26 @@ const CandidateMainHeader = () => {
         AuthService.logout();
         navigate("/login");
     }
+
     function goProfile() {
         navigate("/recruiterProfile");
     }
+
     function Applications() {
         navigate("/JobApplications");
     }
+
     function postOffer(){
         navigate("/OfferForm");
+    }
+
+    function goCandidates(){
+        navigate("/CandidatesList");
+    }
+
+    function goOffers(){
+        navigate("/RecruiterOffer");
+
     }
 
 
@@ -59,15 +71,14 @@ const CandidateMainHeader = () => {
         <header className="bg-blue-500 p-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center relative w-screen">
-                    <Link to="/RecruiterMainHome" className="text-white text-2xl" style={{ fontFamily: 'poppins' }}>
-                        Job Seeker
+                    <Link to="/" className="text-white text-2xl flex flex-row items-center" style={{ fontFamily: 'poppins' }}>
+                        JobSeeker
                     </Link>
                     <button className="text-white ml-4 lg:hidden absolute right-0" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                         {isMenuOpen ? <XMarkIcon className="w-6 h-6" /> : <Bars3Icon className="w-6 h-6" />}
                     </button>
                 </div>
                 <nav className="hidden lg:flex items-center justify-between space-x-10">
-                    <Link to="/CandidatesList" className="text-white text-sm" style={{ fontFamily: 'poppins' }}>Candidates</Link>
                     <Link to="/JobApplications" className="text-white text-sm" style={{ fontFamily: 'poppins' }}>Applications</Link>
 
                     <div className="p-1 relative group" >
@@ -110,10 +121,9 @@ const CandidateMainHeader = () => {
                     <button onClick={postOffer} className="w-full text-white text-left p-2 hover:bg-gray-400 rounded">Post Offer</button>
                     <hr/>
                     <button onClick={Applications} className="w-full text-white text-left p-2 hover:bg-gray-400 rounded">Applications</button>
-                    <Link to="/CandidatesList" className="w-full text-left p-2 text-white hover:bg-gray-400 rounded" onClick={() => setIsMenuOpen(false)}>Candidates</Link>
                     <hr/>
 
-                    <Link to="/RecruiterOffersPage" className="w-full text-left p-2  text-white hover:bg-gray-400 rounded"  onClick={() => setIsMenuOpen(false)}>My Offers</Link>
+                    <Link to="/RecruiterOffersPage" className="w-full text-left p-2  text-white hover:bg-gray-400 rounded"  onClick={goOffers}>My Offers</Link>
                     <div className="flex flex-col gap-2 mt-2">
                         <button onClick={goProfile} className="w-full text-left p-2  text-white hover:bg-gray-400 rounded">Your Profile</button>
                         <button onClick={logout} className="w-full text-left p-2  text-white hover:bg-gray-400 rounded">Sign Out</button>
@@ -126,4 +136,4 @@ const CandidateMainHeader = () => {
     );
 };
 
-export default CandidateMainHeader;
+export default RecruiterMainHeader;

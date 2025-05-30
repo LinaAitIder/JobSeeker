@@ -33,10 +33,11 @@ export default function ApplicationForm(){
             } else if(error.response.status === 400) {
                 setMessage({type:"error", text:"Only pdf Files are accepted!"})
             } else if (error.response.status === 500) {
-                setMessage({ type: "error", text: "A problem occurred on the server. Please try again later!" });
+                setMessage({ type: "error", text: "You have already applied to this offer!"});
             }else {
                 setMessage({type:"error", text:"A problem Occured, please try again later!"})
             }
+
         }
     };
 
@@ -57,11 +58,10 @@ export default function ApplicationForm(){
 
 
     return(
-        <>
+        <div className="bg-gray-100 h-full">
             <CandidateMainHeader />
-
             <div className="flex flex-col justify-center place-items-center mt-10">
-                <span className="text-2xl text-white m-6" style={{fontFamily:'poppins'}}>Application Form </span>
+                <span className="text-2xl text-black m-6 font-bold font-serif" >Application Form </span>
             <form
                 className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md grid grid-cols-1 gap-4"
 
@@ -97,11 +97,12 @@ export default function ApplicationForm(){
                         Submit Application
                     </button>
                 </div>
+                <Message type={message.type} text={message.text} />
 
             </form>
-                <Message type={message.type} text={message.text} />
+
             </div>
 
-        </>
+        </div>
     );
 }

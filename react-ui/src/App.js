@@ -29,16 +29,15 @@ import OfferApplications from "./Components/applications/OfferApplications";
 import RecruiterOfferList from "./Components/users/recruiter/RecruiterOfferList";
 import RecruiterOffersManager from "./Components/users/recruiter/RecruiterOffersManager";
 import RecruiterOffersPage from "./Components/users/recruiter/RecruiterOffersPage";
-
-
-const USER_ID = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).userId:'';
-const RECRUITER_ID=JSON.parse(localStorage.getItem('RECRUTEUR'))
-
+import CompanyDetails from "./Components/companies/CompanyDetails";
+import Offer from "./Components/offers/Offer";
+import CandidatesList from "./Components/users/candidate/CandidatesList";
+import JobApplications from "./Components/users/recruiter/JobApplications";
 
 function App() {
 
   return (
-    <BrowserRouter className="bg-black">
+    <BrowserRouter>
 
       <Routes>
 
@@ -69,6 +68,8 @@ function App() {
             <Route path="/ApplyButton" element={<ApplyButton/>}/>
             <Route path="/ApplicationList" element={<ApplicationList/>}/>
             <Route path="/Applications" element={<Applications/>}/>
+            <Route path="/CompanyDetails/:companyId" element={<CompanyDetails />} />
+            <Route path="/offer/:id" element={<Offer />} />
 
 
         </Route>
@@ -84,7 +85,8 @@ function App() {
             <Route path="/RecruiterOffersPage" element={<RecruiterOffersPage/>}/>
             <Route path="/CompanyInfoManager" element={<CompanyInfoManager/>}/>
             <Route path="/OfferApplications" element={<OfferApplications/>}/>
-
+            <Route path="/CandidatesList" element={<CandidatesList/>}/>
+            <Route path="/JobApplications" element={<JobApplications/>}/>
 
         </Route>
 

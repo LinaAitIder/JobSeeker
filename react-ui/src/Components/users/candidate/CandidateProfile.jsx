@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import CandidateMainHeader from '../../utils/headers/CandidateMainHeader';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import {Navigate} from "react-router-dom";
@@ -7,8 +7,14 @@ import ApplicationList from "../../applications/ApplicationList";
 import CertificateManager from "./CertificationManager";
 import CandidateInfoManager from "./CandidateInfoManager";
 import CVManager from "./CVManager";
+import CertificationManager from "./CertificationManager";
 
 
+
+const LazyInfoManager = React.lazy(() => import('./CandidateInfoManager'));
+const LazyApplicationsManager = React.lazy(() => import('../../applications/ApplicationList'));
+const LazyCertificateManager = React.lazy(() => import('./CertificationManager'));
+const LazyCvManager = React.lazy(() => import('./CVManager'));
 
 class CandidateProfile extends React.Component {
 
@@ -60,18 +66,21 @@ class CandidateProfile extends React.Component {
 
               <TabPanel>
                 <div className="space-y-6" id="section1">
-
-                 <CandidateInfoManager candidateId={userId}/>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <LazyInfoManager candidateId={userId}/>
+                    </Suspense>
+                  <hr/>
+                    <CVManager candidateId={userId}/>
 
                   <hr/>
-                  <CVManager candidateId={userId} />
-                  <hr/>
-                  <CertificateManager candidateId={userId} />
+                        <CertificationManager candidateId={userId} />
                 </div>
               </TabPanel>
 
               <TabPanel>
-                  <ApplicationList candidateId={userId}/>
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <LazyApplicationsManager candidateId={userId}/>
+                  </Suspense>
               </TabPanel>
 
               <TabPanel>

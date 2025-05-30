@@ -93,6 +93,14 @@ class RecruiterService{
         }
     }
 
+    fetchAllApplicationsToRecruiterRequest(recruiterId) {
+        try {
+            return api.get(`recruteur/${recruiterId}/candidatures`);
+        } catch(err) {
+            throw err;
+        }
+    }
+
 
 }
 

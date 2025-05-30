@@ -6,9 +6,8 @@ import OfferApplications from "../../applications/OfferApplications";
 const OfferList = ({ offers }) => {
     const navigate= useNavigate();
     return (
-        <>
-            <span className="text-center place-items-center text-2xl text-white m-8">My Offers</span>
-            <div className="p-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3" >
+        <div className="h-full bg-gray-10">
+            <div className="p-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3 0" >
                 {offers.map((offer) => {
                     let formattedOffer =(DataMapper.mapOfferToEnglish(offer));
                     let offerId =formattedOffer.id;
@@ -30,7 +29,7 @@ const OfferList = ({ offers }) => {
                                 <p><strong>Domain:</strong> {formattedOffer.domain}</p>
                                 <p><strong>Contract Type:</strong> {formattedOffer.contractType}</p>
                                 <p><strong>Location:</strong> {formattedOffer.city}, {formattedOffer.country}</p>
-                                <p><strong>Salary:</strong> {formattedOffer.salaireMin}€ - {formattedOffer.salaryMax}€</p>
+                                <p><strong>Salary:</strong> {formattedOffer.salaryMin}MAD - {formattedOffer.salaryMax}MAD</p>
                                 <p><strong>Published:</strong> {formattedOffer.publicationDate}</p>
                                 <p><strong>Expires:</strong> {formattedOffer.expirationDate}</p>
                             </div>
@@ -38,7 +37,7 @@ const OfferList = ({ offers }) => {
                         </div>
                     )})}
             </div>
-        </>
+        </div>
     );
 };
 

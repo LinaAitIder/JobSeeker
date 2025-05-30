@@ -117,7 +117,13 @@ class CandidateService{
         }
     }
 
-
+    getCandidates(){
+        try {
+            return api.get(`/candidat/all`);
+        } catch(err){
+            console.log(err);
+        }
+    }
 
 
 }

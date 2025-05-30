@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import OfferService from "../../../services/OfferService";
 import OfferList from "../../offers/OfferList";
 import Message from "../../utils/Message";
@@ -32,7 +32,9 @@ export default function RecruiterOffersManager({recruiterId}){
         }; fetchOffers()}, []);
 
     return (
-        <div className="flex flex-col justify-center align-center text-black">
+        <div className="flex flex-col justify-center align-center text-black bg-gray-50 h-full">
+            <span className="text-center place-items-center text-2xl font-semibold text-black m-8 mb-2">My Offers</span>
+            <hr className="my-4"/>
             <RecruiterOfferList offers={offers}/>
             <Message type={message.type} text={message.text} />
         </div>

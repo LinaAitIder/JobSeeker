@@ -27,12 +27,17 @@ class CompanyService {
             return  api.get(`entreprises/${companyId}`);
         }catch(error){
             console.log(error);
-            return error;
         }
     }
 
+    fetchCompanyOffers(companyId) {
+         try{
+             return api.get(`offres/entreprise/${companyId}`);
+         }catch(err){
+             console.log(err);
 
-    //Search Companies
+         }
+    }
 }
 
 export default new CompanyService();

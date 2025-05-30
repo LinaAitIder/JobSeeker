@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import CandidateMainHeader from "../../utils/headers/CandidateMainHeader";
 import OfferService from '../../../services/OfferService';
 import { useNavigate } from 'react-router-dom';
 
-const USER_ID = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).userId : '';
 
 const CandidateMainHome = ()=>{
     const [offers, setOffers] = useState([]);
@@ -11,20 +10,34 @@ const CandidateMainHome = ()=>{
     const [hasCV, setHasCV] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).userId : '';
+    const user = localStorage.getItem('user');
+    const newUserId = user ? JSON.parse(user).userId : '';
+    const [userId, setUserId] = useState('');
+    const prevUserIdRef = useRef(userId);
+
 
     useEffect(() => {
+        const user = localStorage.getItem('user');
+        const userId = user ? JSON.parse(user).userId : null;
+
+        if (!userId) {
+            setError("User not found. Please log in.");
+            setLoading(false);
+            return;
+        }
+
         const initialize = async () => {
             try {
                 setLoading(true);
                 setError(null);
 
-                const cvExists = await OfferService.checkCV(USER_ID);
+                const cvExists = await OfferService.checkCV(userId);
                 setHasCV(cvExists);
 
                 if (cvExists) {
-                    const offers = await OfferService.getRecommendedOffers(USER_ID);
+                    const offers = await OfferService.getRecommendedOffers(userId);
                     setOffers(offers);
-
                 }
             } catch (err) {
                 setError(err.message);
@@ -53,7 +66,14 @@ const CandidateMainHome = ()=>{
         }
 
         if (error) {
-            return <div className="bg-red-300 rounded-lg p-4 text-center text-red-600 col-span-full">{error}</div>;
+            return (
+                <div className=" h-full w-full flex items-center justify-center">
+                    <div className="bg-red-300 rounded-lg p-4 text-center text-red-600 col-span-full">
+                    {error}
+                     </div>
+                </div>
+            );
+
         }
 
         if (!hasCV) {
@@ -74,16 +94,18 @@ const CandidateMainHome = ()=>{
                                     <div className="text-sm space-y-1 text-gray-700 mt-2">
                                         <p><span className="font-semibold">Contract Type:</span> {offer.typeContrat || 'Not specified'}</p>
                                         <p><span className="font-semibold">Location:</span> {offer.ville}, {offer.pays}</p>
-                                        <p><span className="font-semibold">Salary:</span> {offer.salaireMin ? `${offer.salaireMin}€` : '€'} - {offer.salaireMax || ''}€</p>
+                                        <p><span className="font-semibold">Salary:</span> {offer.salaireMin ? `${offer.salaireMin}MAD` : 'MAD'} - {offer.salaireMax || ''}MAD</p>
                                         <p><span className="font-semibold">Published:</span> {offer.datePublication}</p>
                                         <p><span className="font-semibold">Expires:</span> {offer.dateExpiration}</p>
                                     </div>
                                 </div>
 
-                                <div className="mt-auto pt-3 border-t border-gray-200">
+                                <div className="mt-auto pt-3 flex flex-col  h-full ">
+                                    <div className="flex-grow"></div>
+
                                     <button
                                         onClick={() => handleApply(offer.id)}
-                                        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md transition-colors"
+                                        className="inline-block bg-blue-500 hover:bg-blue-600 text-white  px-4 py-2  rounded-md text-sm "
                                     >
                                         Apply
                                     </button>
