@@ -344,7 +344,7 @@ public class CandidatController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('RECRUTEUR')")
-    public ResponseEntity<List<CandidatProfileResponse>> getAllCandidats() {
-        return ResponseEntity.ok(candidatService.getAllCandidats());
+    public ResponseEntity<List<CandidatCompleteResponse>> getAllCandidats() {
+        return ResponseEntity.ok(candidatService.getAllCandidatsWithFiles());
     }
 }

@@ -2,6 +2,7 @@ package com.jobapp.service.impl;
 
 import com.jobapp.dto.exception.FileStorageException;
 import com.jobapp.dto.request.CandidatureRequest;
+import com.jobapp.dto.response.CandidatureCompleteResponse;
 import com.jobapp.dto.response.CandidatureResponse;
 import com.jobapp.dto.exception.NotFoundException;
 import com.jobapp.model.Candidat;
@@ -16,6 +17,7 @@ import com.jobapp.service.FileStorageService;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -186,14 +188,14 @@ public class CandidatureServiceImpl implements CandidatureService {
     }
 
     @Override
-    public ResponseEntity<List<CandidatureResponse>> getAllCandidaturesForRecruteur(Long recruteurId, String statut) {
+    public ResponseEntity<List<CandidatureCompleteResponse>> getAllCandidaturesForRecruteur(Long recruteurId, String statut) {
         try {
             // 1. Vérifier que le recruteur existe
             if (!recruteurRepository.existsById(recruteurId)) {
                 return ResponseEntity.notFound().build();
             }
 
-            // 2. Recupérer toutes les offres du recruteur
+            // 2. Récupérer toutes les offres du recruteur
             List<OffreEmploi> offres = offreRepository.findByRecruteurId(recruteurId);
             List<Long> offreIds = offres.stream().map(OffreEmploi::getId).collect(Collectors.toList());
 
@@ -206,9 +208,9 @@ public class CandidatureServiceImpl implements CandidatureService {
                 candidatures = candidatureRepository.findByOffreIdInOrderByDatePostulationDesc(offreIds);
             }
 
-            // 4. Mapper vers les DTO de response
-            List<CandidatureResponse> responses = candidatures.stream()
-                    .map(this::mapToCandidatureResponse)
+            // 4. Mapper vers les DTO de réponse avec fichiers
+            List<CandidatureCompleteResponse> responses = candidatures.stream()
+                    .map(this::mapToCandidatureCompleteResponse)
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(responses);
@@ -217,6 +219,31 @@ public class CandidatureServiceImpl implements CandidatureService {
             return ResponseEntity.badRequest().body(Collections.emptyList());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    private CandidatureCompleteResponse mapToCandidatureCompleteResponse(Candidature candidature) {
+        try {
+            Resource lettreMotivation = null;
+            if (candidature.getLettreMotivationPath() != null) {
+                lettreMotivation = fileStorageService.loadFileAsResource(candidature.getLettreMotivationPath());
+            }
+
+            return new CandidatureCompleteResponse(
+                    candidature.getId(),
+                    candidature.getCandidat().getId(),
+                    candidature.getCandidat().getNom(),
+                    candidature.getCandidat().getPrenom(),
+                    candidature.getOffre().getId(),
+                    candidature.getOffre().getTitre(),
+                    candidature.getDatePostulation(),
+                    lettreMotivation,
+                    candidature.getMessageRecruteur(),
+                    candidature.getStatut().name()
+            );
+        } catch (Exception e) {
+            logger.error("Error mapping candidature to complete response: " + candidature.getId(), e);
+            return null;
         }
     }
 

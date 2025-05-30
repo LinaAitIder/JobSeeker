@@ -155,19 +155,22 @@ public class FileStorageService {
     public Path getFilePath(String relativePath) {
         return this.fileStorageLocation.resolve(relativePath.substring(1)).normalize();
     }
-
-    public Resource loadFileAsResource(String relativePath) {
+  
+    public Resource loadFileAsResource(String filePath) throws FileStorageException {
         try {
-            Path filePath = getFilePath(relativePath);
-            Resource resource = new UrlResource(filePath.toUri());
+            String normalizedPath = filePath.startsWith("/") ? filePath.substring(1) : filePath;
+            Path path = this.fileStorageLocation.resolve(normalizedPath).normalize();
 
-            if (resource.exists() || resource.isReadable()) {
+            Resource resource = new UrlResource(path.toUri());
+
+            if (resource.exists() && resource.isReadable()) {
                 return resource;
             } else {
-                throw new RuntimeException("Fichier non trouvé ou illisible: " + relativePath);
+                throw new FileStorageException("Fichier introuvable ou non lisible: " + filePath);
             }
         } catch (MalformedURLException ex) {
-            throw new RuntimeException("URL du fichier invalide: " + relativePath, ex);
+            throw new FileStorageException("Chemin de fichier invalide: " + filePath, ex);
         }
     }
+
 }
