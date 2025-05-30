@@ -3,8 +3,11 @@ package com.jobapp.controller;
 import com.jobapp.config.FileStorageProperties;
 import com.jobapp.dto.exception.NotFoundException;
 import com.jobapp.dto.request.CandidatureRequest;
+import com.jobapp.dto.response.CandidatProfileResponse;
 import com.jobapp.dto.response.CandidatureResponse;
 import com.jobapp.model.Candidature;
+import com.jobapp.repository.CandidatureRepository;
+import com.jobapp.service.CandidatService;
 import com.jobapp.service.CandidatureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +16,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,11 +30,17 @@ public class CandidatureController {
     private static final Logger logger = LoggerFactory.getLogger(CandidatureController.class);
     private final CandidatureService candidatureService;
     private final FileStorageProperties fileStorageProperties;
+    private final CandidatService candidatService;
+    private final CandidatureRepository candidatureRepository;
 
     public CandidatureController(CandidatureService candidatureService,
-                                 FileStorageProperties fileStorageProperties) {
+                                 FileStorageProperties fileStorageProperties,
+                                 CandidatService candidatService,
+                                 CandidatureRepository candidatureRepository) {
         this.candidatureService = candidatureService;
         this.fileStorageProperties = fileStorageProperties;
+        this.candidatureRepository = candidatureRepository;
+        this.candidatService = candidatService;
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -93,4 +103,17 @@ public class CandidatureController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping("/{candidatureId}/candidat-profile")
+    @PreAuthorize("hasRole('RECRUTEUR')")
+    public ResponseEntity<CandidatProfileResponse> getCandidatProfilFromCandidature(
+            @PathVariable Long candidatureId) {
+
+            //Récupérer la candidature
+            Candidature candidature = candidatureRepository.findById(candidatureId)
+                    .orElseThrow(() -> new NotFoundException("Candidature non trouvée"));
+
+            return candidatService.getCandidatProfile(candidature.getCandidat().getId());
+    }
+
 }
