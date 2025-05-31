@@ -15,6 +15,20 @@ export default function ApplicationList({candidateId}) {
         return startDate.fromNow();
     }
 
+    const getStatusColor = (status) => {
+        switch (status.toLowerCase()) {
+            case "en_attente":
+                return "bg-yellow-100 text-yellow-800 border-yellow-300";
+            case "acceptee":
+                return "bg-green-100 text-green-800 border-green-300";
+            case "rejetee":
+                return "bg-red-100 text-red-800 border-red-300";
+            default:
+                return "bg-gray-100 text-gray-800 border-gray-300";
+        }
+    };
+
+
 
     useEffect(() => {
         if (!candidateId) return;
@@ -84,7 +98,10 @@ export default function ApplicationList({candidateId}) {
                                 }
                             </p>
                             <p className="mt-2">
-                                <span className="font-small font-medium">Status :</span> {app.status}
+                                <span className="font-small font-medium">Status :</span>
+                                <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold border ${getStatusColor(app.status)}`}>
+        {app.status}
+    </span>
                             </p>
                         </div>
 
