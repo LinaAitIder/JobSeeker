@@ -9,7 +9,6 @@ class OfferService{
     }
 
 
-
     getOffers(){
             return api.get(`/offres`);
     }
@@ -55,6 +54,10 @@ class OfferService{
             params: { q: keyword }
         });
 
+    }
+
+    deleteOfferRequest(offerId){
+        return api.delete(`/offres/${offerId}`);
     }
 
 

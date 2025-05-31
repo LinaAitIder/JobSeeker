@@ -12,6 +12,7 @@ public class OffreEmploi {
     private Long id;
 
     private String titre;
+    @Column(length = 100000)
     private String description;
     private String domaine;
     private String ville;

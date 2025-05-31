@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import RecruiterService from "../../services/RecruiterService";
 import DataMapper from "../utils/DataMapper";
 import Message from '../utils/Message'
@@ -18,7 +18,10 @@ export default function OfferForm(){
         salaryMax : '',
         contractType : '',
     });
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState({
+        type:'',
+        text:''
+    });
     const [errors, setErrors] = useState({});
 
 
@@ -43,9 +46,12 @@ export default function OfferForm(){
         }));
     }
 
-    async function handleSubmit(){
+    async function handleSubmit(e){
+        e.preventDefault();
         if (!validateForm()) {
             window.alert("Please correct the form errors");
+            setMessage({type:"error", text:"Please correct the form errors"});
+
             return
 
         }
@@ -53,12 +59,10 @@ export default function OfferForm(){
         console.log("recruiterId", recruiterId);
         try{
             const response = await RecruiterService.addOfferRequest(formmatedFormData, recruiterId);
-            if (response.status===200){
-                setMessage("Offer successfully Posted!")
-            }
+                setMessage({type:"success", text:"Offer successfully Posted!"});
         }catch(err){
             window.alert("A problem Occured, please retry Again!")
-            setMessage("A problem Occured, please retry Again!")
+            setMessage({type:"error", text:"A problem Occured, please retry again!"});
 
         }
     }
@@ -201,15 +205,13 @@ export default function OfferForm(){
                 >
                     Submit
                 </button>
+                {message && (
+                    <Message type={message.type} text={message.text} />
+                )}
             </form>
+
             </div>
-            {message && (
-                <Message
-                    type={message.includes("success") ? "success" : "error"}
-                    text={message}
-                    onClose={() => setMessage('')}
-                />
-            )}
+
 
 
         </>

@@ -81,10 +81,10 @@ export default function OfferApplications(){
     }
 
     return(
-        <>
-            <RecruiterMainHeader/>
+        <div  className="flex flex-col min-h-screen">
+            <RecruiterMainHeader />
             {applications.length === 0 ? (
-                <div className="bg-gray-50 h-full w-full flex items-center justify-center">
+                <div className="bg-gray-50 h-screen w-full  flex items-center justify-center">
                 <span className="text-gray-500 text-center">No applications for your offer yet.</span>
                 </div>
             ) : (
@@ -154,6 +154,6 @@ export default function OfferApplications(){
                     </div>
             )})
 
-        </>
+        </div>
     );
 }

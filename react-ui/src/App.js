@@ -34,6 +34,10 @@ import Offer from "./Components/offers/Offer";
 import CandidatesList from "./Components/users/candidate/CandidatesList";
 import JobApplications from "./Components/users/recruiter/JobApplications";
 
+function CandidateCardInfo() {
+    return null;
+}
+
 function App() {
 
   return (
@@ -87,6 +91,8 @@ function App() {
             <Route path="/OfferApplications" element={<OfferApplications/>}/>
             <Route path="/CandidatesList" element={<CandidatesList/>}/>
             <Route path="/JobApplications" element={<JobApplications/>}/>
+            <Route path="/candidate-profile" element={<CandidateCardInfo/>}/>
+
 
         </Route>
 

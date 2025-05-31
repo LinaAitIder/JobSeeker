@@ -6,11 +6,14 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import RecruiterMainHeader from "../../utils/headers/RecruiterMainHeader";
 import ApplicationService from "../../../services/ApplicationService";
+import {useNavigate} from "react-router-dom";
+import api from "../../../api/axiosConfig";
 
 
 export default function JobApplications(){
     const [applicationsReceived, setApplicationsReceived] = useState([]);
     const recruiterId = JSON.parse(localStorage.getItem("user")).userId;
+    const navigate = useNavigate();
     console.log(recruiterId);
     useEffect(()=>{
 
@@ -33,6 +36,7 @@ export default function JobApplications(){
             console.error(err);
         }
     }
+
     async function  fetchAllApplicationsToRecruiter(){
         try{
             const response = await RecruiterService.fetchAllApplicationsToRecruiterRequest(recruiterId);
@@ -45,6 +49,26 @@ export default function JobApplications(){
             setApplicationsReceived(mappedApplications);
         } catch(error){
             console.log(error);
+        }
+    }
+
+
+
+
+    async function redirectToCandidateProfile(candidateId) {
+        try{
+           console.log(candidateId);
+           let englishCandidate = DataMapper.mapCandidateToEnglish(candidateId);
+            console.log(englishCandidate);
+
+            navigate("/candidate-profile", {
+                state: {
+                    candidateId: candidateId
+                }
+            })
+
+        } catch(err){
+            console.log(err);
         }
     }
 
@@ -91,6 +115,12 @@ export default function JobApplications(){
                                     className="text-blue-500 text-sm underline"
                                 >
                                     Click to view motivation letter
+                                </button>
+                                <button
+                                    onClick={() => redirectToCandidateProfile(app.candidateId)}
+                                    className="text-blue-500 text-sm underline"
+                                >
+                                    Click to view candidate profile
                                 </button>
                             </div>
                         </div>

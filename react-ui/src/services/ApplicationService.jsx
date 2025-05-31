@@ -47,6 +47,14 @@ class ApplicationService{
         }
     }
 
+    getCandidateByApplicationRequest(appId){
+        try {
+            return api.get(`/candidature/${appId}/candidat-profile`);
+        } catch(err){
+            console.log(err);
+        }
+
+    }
 
 
 }

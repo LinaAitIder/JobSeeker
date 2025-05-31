@@ -25,7 +25,7 @@ public class Candidature {
     @Column(name = "lettre_motivation_path")
     private String lettreMotivationPath;
 
-    @Column(name = "message_recruteur")
+    @Column(name = "message_recruteur", length = 10000)
     private String messageRecruteur;
 
     public enum Statut {

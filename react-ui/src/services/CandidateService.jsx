@@ -126,6 +126,8 @@ class CandidateService{
     }
 
 
+
+
 }
 
 export default new CandidateService();
