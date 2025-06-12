@@ -1,6 +1,7 @@
 import axios from 'axios';
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 const user = JSON.parse(localStorage.getItem('user'));
+console.log(process.env.REACT_APP_API_URL);
 
 class AuthService{
 
