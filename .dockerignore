@@ -1,0 +1,7 @@
+*
+!target/JobApp.jar
+**/.git
+**/.idea
+**/node_modules
+**/target/*.jar
+!**/target/JobApp.jar
