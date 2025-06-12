@@ -42,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000"));  // Autorise le frontend
+        config.setAllowedOrigins(List.of("http://localhost:3000", "https://jobseeker-frontend-w6g5.onrender.com"));  // Autorise le frontend
         config.setAllowedMethods(List.of("*"));  // GET, POST, PUT, DELETE, etc.
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Content-Disposition"));
