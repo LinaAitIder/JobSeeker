@@ -43,7 +43,6 @@ target/test-uploads/
 #Enviroment vr
 .env
 react-ui/.env
-src/main/java/com/jobapp/util/MySQLConnection.java
 src/main/resources/application.properties
 src/test/java/com/jobapp/config/TestConfig.java
 src/test/resources/application-test.properties
