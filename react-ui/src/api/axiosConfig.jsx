@@ -2,8 +2,8 @@ import axios from 'axios';
 import AuthService from '../services/AuthService';
 import { Navigate } from 'react-router-dom';
 
-const API_BASE_URL = "http://localhost:8080/api";
-
+const API_BASE_URL = "https://jobseeker-backend-y5b9.onrender.com/api";
+const API_BASE_LOCAL_URL = "http://localhost:8080/api";
 //Creating an axios instance
 const api = axios.create({
     baseURL: API_BASE_URL,

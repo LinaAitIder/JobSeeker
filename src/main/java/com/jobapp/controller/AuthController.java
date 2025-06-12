@@ -28,7 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {
+        "http://localhost:3000",
+        "https://jobseeker-frontend-w6g5.onrender.com"
+})
 public class AuthController {
 
     private final AuthService authService;
