@@ -63,7 +63,7 @@ export default function ApplicationList({candidateId}) {
             if(response.status === 200){
                 const motivationLetterFile = new Blob([response.data], { type: 'application/pdf' });
                 const motivationLetterUrl = URL.createObjectURL(motivationLetterFile);
-                console.log(motivationLetterUrl);
+                //console.log(motivationLetterUrl);
                 window.open(motivationLetterUrl);
             } else {
                 console.warn("Unexpected response status:", response.status);
