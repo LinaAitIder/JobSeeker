@@ -57,6 +57,8 @@ This project was developed as part of our semester program. It presents a modern
 ---
 
 ## 🌐 Deployment  
+⚠️ _Please note: The application may respond slowly during backend calls due to limitations of the Render free tier. This is caused by cold starts when the backend service has been idle for some time._
+
 Deployed using Docker on **Render**:  
 🔗 [https://jobseeker-frontend-w6g5.onrender.com](https://jobseeker-frontend-w6g5.onrender.com)
 
