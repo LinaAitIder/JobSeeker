@@ -3,6 +3,7 @@ package com.jobapp.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,7 +26,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(withDefaults())  // Active CORS avec la configuration par défaut
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)  // Désactive CSRF (nécessaire pour les API REST)
                 .authorizeHttpRequests(auth -> auth
                         // Dans un vrai environnement, on utiliserait :
@@ -42,7 +43,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "https://jobseeker-frontend-w6g5.onrender.com"));  // Autorise le frontend
+        config.setAllowedOrigins(List.of("https://jobseeker-frontend-w6g5.onrender.com"));  // Autorise le frontend
         config.setAllowedMethods(List.of("*"));  // GET, POST, PUT, DELETE, etc.
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Content-Disposition"));
