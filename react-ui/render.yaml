@@ -8,7 +8,5 @@ services:
         value: https://jobseeker-backend-y5b9.onrender.com/api
       - key: REACT_APP_API_LOCAL_URL
         value: http://localhost:8080/api
-      - key: REACT_APP_CLIENT_ID
-        value: 232438410232-uitc8qa02on454mvi9158hrtv04e8eet.apps.googleusercontent.com
     buildCommand: ""
     startCommand: ""
