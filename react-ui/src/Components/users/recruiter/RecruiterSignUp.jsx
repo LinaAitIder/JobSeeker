@@ -34,7 +34,7 @@ export const RecruiterSignUp = () => {
         setMessage('This Email Already Exists');
       } else {
         setError(true);
-        if(password.lenght<6) {
+        if(password.length <6) {
           setMessage(error.response.data.message);
         } else {
           setMessage("An error occured! Please review your informations.")

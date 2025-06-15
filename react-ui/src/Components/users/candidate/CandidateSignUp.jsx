@@ -35,21 +35,23 @@ export const CandidateSignUp = () => {
         if(response.status === 201){
           //redirect to login
           navigate('/login')
-        } else if(response.status===409){
-          document.getElementById("error-msg").className="text-black bg-red-400 border p-4 m-4 text-center";
-          setMessage('Email already exists');
-        } else {
-          document.getElementById("error-msg").className="text-black bg-red-400 border p-4 m-4 text-center";
-          setMessage('Server error');
+           setMessage('Server error');
         }
       }catch(error){
         setError(true);
-        console.error("Full error:", {
-          status: error.response?.status,
-          data: error.response?.data,
-          request: error.config?.data
-        });
-        setMessage("An error occured! please verify your informations. ")
+        setError(true);
+        if(error.response.status === 409){
+          setError(true);
+          setMessage('This Email Already Exists');
+        } else {
+          setError(true);
+          if(motdepasse.length <6) {
+            setMessage(error.response.data.message);
+          } else {
+            setMessage("An error occured! Please review your informations.")
+          }
+
+        }
       }
 
 
