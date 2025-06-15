@@ -39,19 +39,22 @@ This project was developed as part of our semester program. It presents a modern
 |:--:|
 | *Figure 3: Recruiter Sign Up* |
 
+| ![SignIn](https://github.com/user-attachments/assets/7ef4d6f2-cace-4477-b2f3-9e019c432bb1) |
+|:--:|
+| *Figure 4: Sign In Page* |
+
 | ![EmailJS](https://github.com/user-attachments/assets/b6a85e93-0148-4220-9658-008b9e1995b2) |
 |:--:|
-| *Figure 4: OTP sent via EmailJS* |
-
+| *Figure 5: OTP sent via EmailJS* |
 
 | ![RecuiterProfile](https://github.com/user-attachments/assets/9fcae36b-d844-40d6-bfc2-b1618252cb76) |
 |:--:|
-| *Figure 5: Recruiter's Profile* |
+| *Figure 6: Recruiter's Profile* |
 
 
 | ![RealTimeTrack](https://github.com/user-attachments/assets/3929d906-6432-4a74-8c76-3a23730a8237) |
 |:--:|
-| *Figure 6: Real Time Application status Tracking* |
+| *Figure 7: Real Time Application status Tracking* |
 
 
 ---
