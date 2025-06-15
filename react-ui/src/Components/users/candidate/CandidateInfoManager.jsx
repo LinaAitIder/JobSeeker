@@ -31,15 +31,15 @@ export default class CandidateInfoManager extends React.Component{
         console.log("CandidatInfoForm ...")
         console.log(this.state.candidateId);
         //Loading Candidat Information
-        this.fetchCandidateData();
+        this.fetchCandidateData().then(r => console.log("candidate Data Fetched"));
         //Loading Countries
-        this.fetchCountries();
+        this.fetchCountries().then(r=> console.log("Countries Fetched"));
         //Loading ProfilePicture
-        this.fetchCandidatPProfile();
+        this.fetchCandidatPProfile().then(r => console.log("Candidate Profile Picture Candidates"));
     }
 
     async fetchCountries(){
-        await api.get('https://restcountries.com/v3.1/all')
+        await api.get('https://restcountries.com/v3.1/all?fields=name,flags')
             .then((response) => {
                 this.setState({ countries: response.data });
             })
@@ -49,28 +49,28 @@ export default class CandidateInfoManager extends React.Component{
 
     }
     async fetchCandidateData(){
-      await api.get(`/candidat/${this.state.candidateId}`)
-          .then((response) => {
-              console.log(response.data);
-              const apiData = response.data;
-              console.log("This is the parted Data :", apiData);
+        await api.get(`/candidat/${this.state.candidateId}`)
+            .then((response) => {
+                console.log(response.data);
+                const apiData = response.data;
+                console.log("This is the parted Data :", apiData);
 
-              const apiDataT = DataMapper.mapCandidateToEnglish(apiData);
-              console.log("fetchedFormattedData :",apiDataT);
+                const apiDataT = DataMapper.mapCandidateToEnglish(apiData);
+                console.log("fetchedFormattedData :",apiDataT);
 
-              this.setState({
-                  currStateCandidate: {
-                      ...apiDataT
-                  },
-              })
-              console.log("this is the current:",this.state.currStateCandidate);
-          })
-          .catch((error) => {
-              console.error('Error fetching candidate profile:', error);
-          });
+                this.setState({
+                    currStateCandidate: {
+                        ...apiDataT
+                    },
+                })
+                console.log("this is the current:",this.state.currStateCandidate);
+            })
+            .catch((error) => {
+                console.error('Error fetching candidate profile:', error);
+            });
     }
     async fetchCandidatPProfile() {
-       await CandidateService.getPProfileRequest(this.state.candidateId).then((response)=>{
+        await CandidateService.getPProfileRequest(this.state.candidateId).then((response)=>{
             const fetchedImageUrl=URL.createObjectURL(response.data);
             console.log("fetched Image :",fetchedImageUrl);
             if(response.status === 200){
@@ -81,7 +81,7 @@ export default class CandidateInfoManager extends React.Component{
 
         }).catch((err)=>{
             console.log(err);
-       })
+        })
     }
 
     async updateInfoData() {
@@ -212,7 +212,7 @@ export default class CandidateInfoManager extends React.Component{
                         }}>
                             <option >{this.state.currStateCandidate.country}</option>
                             {countries.map((c) => (
-                                <option key={c.cca3} value={c.cca3} >{c.name.common}</option>
+                                <option key={c.cca3} value={c.cca3} > {c.name.common}</option>
                             ))}
                         </select>
                     </div>
