@@ -31,15 +31,15 @@ export default class CandidateInfoManager extends React.Component{
         console.log("CandidatInfoForm ...")
         console.log(this.state.candidateId);
         //Loading Candidat Information
-        this.fetchCandidateData();
+        this.fetchCandidateData().then(r => console.log("candidate Data Fetched"));
         //Loading Countries
-        this.fetchCountries();
+        this.fetchCountries().then(r=> console.log("Countries Fetched"));
         //Loading ProfilePicture
-        this.fetchCandidatPProfile();
+        this.fetchCandidatPProfile().then(r => console.log("Candidate Profile Picture Candidates"));
     }
 
     async fetchCountries(){
-        await api.get('https://restcountries.com/v3.1/all')
+        await api.get('https://restcountries.com/v3.1/all?fields=name,flags')
             .then((response) => {
                 this.setState({ countries: response.data });
             })
@@ -212,7 +212,7 @@ export default class CandidateInfoManager extends React.Component{
                         }}>
                             <option >{this.state.currStateCandidate.country}</option>
                             {countries.map((c) => (
-                                <option key={c.cca3} value={c.cca3} >{c.name.common}</option>
+                                <option key={c.cca3} value={c.cca3} > {c.name.common}</option>
                             ))}
                         </select>
                     </div>

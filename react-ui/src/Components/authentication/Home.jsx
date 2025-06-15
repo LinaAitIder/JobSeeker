@@ -22,14 +22,10 @@ const Home=()=>{
                   <p className="text-black text-center " >Or searching for a Candidate ?   </p>
                   <p className="text-black text-center ">We are here to help you   </p>
               </div>
-                <div className="flex justify-center mt-6">
-                    <button
-                        className="rounded-full bg-blue-500 px-10 py-3 mb-3 text-white font-semibold"
-                        onClick={redirectLogin}
-                    >
-                        Add your CV
-                    </button>
-                </div>
+              <button className="rounded-full bg-blue-500 p-4  m-8 text-white font-semibold flex flex-col place-content-center align-center"
+                      onClick={redirectLogin}>
+                <span>Add your CV</span>
+              </button>
             </div>
 
           </div>
