@@ -24,14 +24,14 @@ export const RecruiterSignUp = () => {
     try{
       const response = await AuthService.registerRecruiter(recruiterData);
       setMessage(response.data);
-      if(response.status === 200){
         navigate('/login')
-      }
     }catch(error){
       setError(true);
-      if(error.response.status === 409){
+
+      const status = error?.response?.status;
+      if(status === 409){
         setError(true);
-        setMessage('This Email Already Exists');
+        setMessage(  'This Email Already Exists');
       } else {
         setError(true);
         if(password.lenght<6) {
