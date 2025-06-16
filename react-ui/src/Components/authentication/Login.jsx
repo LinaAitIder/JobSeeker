@@ -37,7 +37,7 @@ export const Login = () => {
 
   //Handling the login logic
   const handleSignIn = async(e)=>{
-    e.preventDefault(); 
+    e.preventDefault();
     try{
       const response = await AuthService.login({email, motDePasse});
       console.log("email:", email);
