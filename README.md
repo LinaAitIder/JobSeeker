@@ -56,6 +56,10 @@ This project was developed as part of our semester program. It presents a modern
 |:--:|
 | *Figure 7: Real Time Application status Tracking* |
 
+---
+## Showcase Video
+
+https://github.com/user-attachments/assets/37a24974-292b-4249-95a9-ed403bdf9634
 
 ---
 
