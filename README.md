@@ -59,6 +59,7 @@ This project was developed as part of our semester program. It presents a modern
 ---
 ## Showcase Video
 
+https://github.com/user-attachments/assets/3540d0ce-a6e6-402b-bf3a-170c891ba0cf
 
 ---
 
